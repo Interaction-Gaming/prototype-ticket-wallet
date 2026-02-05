@@ -332,6 +332,23 @@
       animation: hotspotPulse 1s ease-in-out;
     }
 
+    /* Modal Overlay */
+    .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.75);display:flex;align-items:center;justify-content:center;z-index:9998;opacity:0;visibility:hidden;transition:opacity .2s ease,visibility .2s ease}
+    .modal-overlay.visible{opacity:1;visibility:visible}
+    .modal-box{background:#1a1a1a;padding:28px 24px;border-radius:20px;text-align:center;max-width:320px;width:90%;transform:scale(.95);transition:transform .2s ease}
+    .modal-overlay.visible .modal-box{transform:scale(1)}
+    .modal-box h3{color:#fff;margin:0 0 8px;font-size:18px;font-weight:700}
+    .modal-box p{color:#999;margin:0 0 24px;font-size:14px;line-height:1.4}
+    .modal-buttons{display:flex;flex-direction:column;gap:12px}
+    .modal-btn{display:block;width:100%;padding:14px 20px;border:none;border-radius:12px;font-size:16px;font-weight:600;cursor:pointer;text-decoration:none;text-align:center;transition:transform .1s ease,box-shadow .2s ease}
+    .modal-btn.primary{background:#0f5c57;color:#fff}
+    .modal-btn.primary:hover{background:#0a4a45}
+    .modal-btn.secondary{background:rgba(255,255,255,.1);color:#fff}
+    .modal-btn.secondary:hover{background:rgba(255,255,255,.15)}
+    .modal-btn:active{transform:scale(.98)}
+    .modal-close{position:absolute;top:12px;right:12px;width:32px;height:32px;border:none;border-radius:50%;background:rgba(255,255,255,.1);color:#fff;font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center}
+    .modal-close:hover{background:rgba(255,255,255,.2)}
+
     /* Password Protection Overlay */
     .pw-overlay{position:fixed;inset:0;background:rgba(0,0,0,.95);display:flex;align-items:center;justify-content:center;z-index:9999;flex-direction:column;gap:16px}
     .pw-overlay.hidden{display:none}
@@ -363,7 +380,7 @@
   </script>
   <script>
     (function(){
-      const clickables = () => document.querySelectorAll('a[href$=".html"]:not(.pw-overlay *)');
+      const clickables = () => document.querySelectorAll('a[href$=".html"]:not(.pw-overlay *):not(.modal-overlay *)');
       function triggerEntryPulse(el) {
         el.classList.add('hotspot-pulse');
         setTimeout(() => {
@@ -611,16 +628,54 @@
   }
 </script>
 
+<!-- Keno View Ticket Modal -->
+<div class="modal-overlay" id="kenoModal">
+  <div class="modal-box" style="position:relative">
+    <button class="modal-close" onclick="closeKenoModal()" aria-label="Close">&times;</button>
+    <h3>View Keno Ticket</h3>
+    <p>How would you like to view your Keno ticket results?</p>
+    <div class="modal-buttons">
+      <a href="watch-ticket.html" class="modal-btn primary">Watch Drawings</a>
+      <button class="modal-btn secondary" onclick="alert('List Results screen coming soon')">List Results</button>
+    </div>
+  </div>
+</div>
+
 <script>
-  // Wire "View More" on the Keno card to Watch Ticket screen
-    const kenoCard = document.querySelector('.ticketCard[data-game="keno"]');
+  function openKenoModal() {
+    document.getElementById('kenoModal').classList.add('visible');
+    // Trigger pulse on the Watch Drawings link after modal opens
+    setTimeout(() => {
+      const watchBtn = document.querySelector('#kenoModal a[href$=".html"]');
+      if (watchBtn) {
+        watchBtn.classList.add('hotspot-pulse');
+        setTimeout(() => {
+          watchBtn.classList.remove('hotspot-pulse');
+          setTimeout(() => {
+            watchBtn.classList.add('hotspot-pulse');
+            setTimeout(() => watchBtn.classList.remove('hotspot-pulse'), 1000);
+          }, 1000);
+        }, 1000);
+      }
+    }, 200);
+  }
+  function closeKenoModal() {
+    document.getElementById('kenoModal').classList.remove('visible');
+  }
+  // Close modal when clicking outside
+  document.getElementById('kenoModal').addEventListener('click', function(e) {
+    if (e.target === this) closeKenoModal();
+  });
+
+  // Wire "View Ticket" on the Keno card to open modal
+  const kenoCard = document.querySelector('.ticketCard[data-game="keno"]');
 
   if (kenoCard) {
     const kenoViewMore = kenoCard.querySelector('[data-action="more"]:not(.disabled)');
 
     if (kenoViewMore) {
       kenoViewMore.addEventListener('click', () => {
-        window.location.href = 'watch-ticket.html';
+        openKenoModal();
       });
     }
   }
