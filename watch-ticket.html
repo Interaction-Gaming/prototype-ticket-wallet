@@ -52,10 +52,36 @@
     .close-btn:active{
       background:rgba(0,0,0,.15);
     }
+
+    /* Password Protection Overlay */
+    .pw-overlay{position:fixed;inset:0;background:rgba(0,0,0,.95);display:flex;align-items:center;justify-content:center;z-index:9999;flex-direction:column;gap:16px}
+    .pw-overlay.hidden{display:none}
+    .pw-box{background:#1a1a1a;padding:32px;border-radius:16px;text-align:center;max-width:300px}
+    .pw-box h2{color:#fff;margin:0 0 8px;font-size:20px}
+    .pw-box p{color:#888;margin:0 0 20px;font-size:14px}
+    .pw-box input{width:100%;padding:12px;border:1px solid #333;border-radius:8px;background:#222;color:#fff;font-size:16px;box-sizing:border-box;text-align:center}
+    .pw-box input:focus{outline:none;border-color:#0f5c57}
+    .pw-box button{width:100%;margin-top:12px;padding:12px;border:none;border-radius:8px;background:#0f5c57;color:#fff;font-size:16px;font-weight:600;cursor:pointer}
+    .pw-box button:hover{background:#0a4a45}
+    .pw-error{color:#ff6b6b;font-size:13px;margin-top:8px;display:none}
   </style>
 </head>
 
 <body>
+  <div class="pw-overlay" id="pwOverlay">
+    <div class="pw-box">
+      <h2>Protected Prototype</h2>
+      <p>Enter password to continue</p>
+      <input type="password" id="pwInput" placeholder="Password" autocomplete="off">
+      <button onclick="checkPw()">Enter</button>
+      <div class="pw-error" id="pwError">Incorrect password</div>
+    </div>
+  </div>
+  <script>
+    (function(){var k='tw_auth';if(localStorage.getItem(k)==='1'){document.getElementById('pwOverlay').classList.add('hidden');}})();
+    function checkPw(){var p=document.getElementById('pwInput').value;if(p==='w1nn1ng'){localStorage.setItem('tw_auth','1');document.getElementById('pwOverlay').classList.add('hidden');}else{document.getElementById('pwError').style.display='block';document.getElementById('pwInput').value='';}}
+    document.getElementById('pwInput').addEventListener('keypress',function(e){if(e.key==='Enter')checkPw();});
+  </script>
   <div class="phone">
     <!-- Full screen modal image -->
     <img
