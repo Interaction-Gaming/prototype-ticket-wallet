@@ -1,0 +1,784 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ticket Details</title>
+
+  <style>
+    :root{
+      --teal-900:#0b2a2a;
+      --teal-800:#0f3a3a;
+      --teal-700:#0f5c57;
+      --lime:#c9ea4a;
+
+      --paper:#f6f0e4;
+      --ink:#0f1516;
+
+      --shadow:0 16px 40px rgba(0,0,0,.35);
+
+      --phone-w:402px;
+      --phone-h:874px;
+
+      /* match highlight */
+      --match-bg: rgba(201,234,74,.55);
+      --match-border: rgba(15,92,87,.95);
+    }
+
+    *{ box-sizing:border-box; }
+    body{
+      margin:0;
+      font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;
+      background:#111;
+      display:flex;
+      justify-content:center;
+      padding:20px;
+    }
+
+    .phone{
+      width:var(--phone-w);
+      height:var(--phone-h);
+      border-radius:28px;
+      overflow:hidden;
+      background:linear-gradient(180deg,var(--teal-900), var(--teal-800) 34%, #0b2323 55%, #0a1d1d);
+      box-shadow:0 20px 60px rgba(0,0,0,.55);
+      display:flex;
+      flex-direction:column;
+      color:#fff;
+    }
+
+    header{
+      padding:18px 16px 14px;
+      padding-top:42px;
+      border-bottom:2px solid rgba(201,234,74,.85);
+      position:relative;
+    }
+
+    .titleRow{
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      position:relative;
+      height:28px;
+    }
+
+    .back{
+      position:absolute;
+      left:0;
+      top:50%;
+      transform:translateY(-50%);
+      display:flex;
+      align-items:center;
+      padding:8px 10px;
+      border-radius:12px;
+      text-decoration:none;
+      color:rgba(255,255,255,.92);
+      font-weight:900;
+      font-size:14px;
+    }
+    .back:hover{ background:rgba(255,255,255,.08); }
+
+    .title{
+      font-weight:900;
+      letter-spacing:.2px;
+      font-size:18px;
+    }
+
+    main{
+      flex:1;
+      overflow:auto;
+      padding:14px 14px 18px;
+      background:
+        radial-gradient(1200px 700px at 50% 0%, rgba(255,255,255,.10), rgba(255,255,255,0) 55%),
+        linear-gradient(180deg, rgba(0,0,0,.12), rgba(0,0,0,.38));
+    }
+
+    .card{
+      background:rgba(255,255,255,.06);
+      border:1px solid rgba(255,255,255,.12);
+      border-radius:22px;
+      padding:12px;
+      box-shadow:var(--shadow);
+      backdrop-filter: blur(6px);
+    }
+
+    /* ===== TOP MODULE (refined grid) ===== */
+    .topGrid{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap:10px;
+      align-items:stretch;
+    }
+
+    .logoTile{
+      background:#fff;
+      border-radius:16px;
+      overflow:hidden;
+      border:1px solid rgba(0,0,0,.10);
+      height:78px;
+      box-shadow:0 12px 24px rgba(0,0,0,.18);
+    }
+    .logoTile img{
+      width:100%;
+      height:100%;
+      object-fit:cover;
+      display:block;
+    }
+
+    .infoTile{
+      background:var(--paper);
+      color:var(--ink);
+      border-radius:16px;
+      padding:10px 10px 9px;
+      box-shadow:0 12px 24px rgba(0,0,0,.20);
+      border:1px solid rgba(0,0,0,.06);
+      min-height:78px;
+      display:flex;
+      flex-direction:column;
+      justify-content:center;
+    }
+
+    .span2{ grid-column: 1 / span 2; }
+
+    .label{
+      font-size:10px;
+      font-weight:900;
+      letter-spacing:.25px;
+      color:rgba(0,0,0,.55);
+      text-transform:uppercase;
+      margin-bottom:4px;
+    }
+    .value{
+      font-size:14px;
+      font-weight:900;
+      color:rgba(0,0,0,.82);
+      line-height:1.15;
+    }
+
+    .statusPill{
+      display:inline-flex;
+      align-items:center;
+      gap:6px;
+      padding:7px 12px;
+      border-radius:999px;
+      font-weight:1000;
+      font-size:12px;
+      border:1px solid rgba(0,0,0,.10);
+      background:rgba(0,0,0,.08);
+      color:rgba(0,0,0,.72);
+      width:max-content;
+    }
+
+    .winningsBig{
+      font-size:18px;
+      font-weight:1000;
+      color:var(--teal-700);
+    }
+
+    .drawDateRow .value{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+    }
+    .activePill{
+      font-size:12px;
+      font-weight:1000;
+      padding:6px 10px;
+      border-radius:999px;
+      background:rgba(201,234,74,.20);
+      border:1px solid rgba(201,234,74,.30);
+      color:rgba(0,0,0,.70);
+      white-space:nowrap;
+    }
+
+    /* ===== LOWER MODULE ===== */
+    .sectionHeader{
+      display:flex;
+      align-items:flex-end;
+      justify-content:space-between;
+      margin:14px 2px 10px;
+    }
+    .sectionHeader h2{
+      margin:0;
+      font-size:14px;
+      font-weight:900;
+      letter-spacing:.2px;
+      color:rgba(255,255,255,.92);
+    }
+    .sectionHeader .hint{
+      font-size:12px;
+      font-weight:700;
+      color:rgba(255,255,255,.65);
+    }
+
+    .drawDeck{
+      display:flex;
+      gap:12px;
+      overflow-x:auto;
+      scroll-snap-type:x mandatory;
+      -webkit-overflow-scrolling:touch;
+      padding-bottom:6px;
+    }
+    .drawDeck::-webkit-scrollbar{ height:10px; }
+    .drawDeck::-webkit-scrollbar-thumb{
+      background:rgba(255,255,255,.18);
+      border-radius:999px;
+      border:2px solid rgba(0,0,0,0);
+      background-clip: padding-box;
+    }
+
+    .drawCard{
+      flex:0 0 320px;
+      scroll-snap-align:start;
+      background:var(--paper);
+      color:var(--ink);
+      border-radius:18px;
+      padding:12px;
+      box-shadow:0 14px 28px rgba(0,0,0,.22);
+      border:1px solid rgba(0,0,0,.06);
+    }
+
+    .drawTop{
+      display:flex;
+      align-items:flex-start;
+      justify-content:space-between;
+      gap:10px;
+      margin-bottom:10px;
+      padding-bottom:10px;
+      border-bottom:1px solid rgba(0,0,0,.08);
+    }
+
+    .drawDate{
+      font-weight:1000;
+      font-size:14px;
+      color:rgba(0,0,0,.84);
+      line-height:1.1;
+    }
+    .drawSub{
+      margin-top:4px;
+      font-size:12px;
+      font-weight:800;
+      color:rgba(0,0,0,.55);
+    }
+
+    .totalChip{
+      text-align:right;
+      background:rgba(15,92,87,.10);
+      border:1px solid rgba(15,92,87,.18);
+      border-radius:999px;
+      padding:6px 10px;
+      font-weight:1000;
+      color:var(--teal-700);
+      white-space:nowrap;
+      min-width:88px;
+    }
+    .totalChip.zero{
+      background:rgba(0,0,0,.06);
+      border-color:rgba(0,0,0,.10);
+      color:rgba(0,0,0,.68);
+    }
+
+    .lines{
+      display:flex;
+      flex-direction:column;
+      gap:10px;
+    }
+
+    .lineRow{
+      display:flex;
+      align-items:flex-start;
+      justify-content:space-between;
+      gap:10px;
+      padding:10px;
+      border-radius:16px;
+      background:rgba(255,255,255,.55);
+      border:1px solid rgba(0,0,0,.08);
+    }
+
+    .lineLeft{ min-width:0; }
+
+    .lineTitle{
+      font-size:12px;
+      font-weight:1000;
+      color:rgba(0,0,0,.78);
+      margin-bottom:6px;
+    }
+
+    .nums{
+      display:flex;
+      gap:6px;
+      flex-wrap:wrap;
+    }
+
+    .ball{
+      width:30px;
+      height:30px;
+      border-radius:999px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-size:12px;
+      font-weight:1000;
+      background:#fff;
+      border:1px solid rgba(0,0,0,.10);
+      box-shadow:0 6px 12px rgba(0,0,0,.08);
+      color:rgba(0,0,0,.82);
+    }
+
+    /* MATCH DECORATION */
+    .ball.match{
+      background:var(--match-bg);
+      border:4px solid var(--match-border);
+      box-shadow:0 10px 18px rgba(0,0,0,.20);
+      transform: translateY(-1px);
+    }
+
+    .winBadge{
+      flex:0 0 auto;
+      border-radius:999px;
+      padding:6px 10px;
+      font-size:12px;
+      font-weight:1000;
+      border:1px solid rgba(0,0,0,.08);
+      background:rgba(0,0,0,.06);
+      color:rgba(0,0,0,.72);
+      min-width:64px;
+      text-align:center;
+    }
+    .winBadge.win{
+      background:rgba(15,92,87,.12);
+      border-color:rgba(15,92,87,.18);
+      color:var(--teal-700);
+    }
+
+    main::-webkit-scrollbar{ width:10px; }
+    main::-webkit-scrollbar-thumb{
+      background:rgba(255,255,255,.18);
+      border-radius:999px;
+      border:2px solid rgba(0,0,0,0);
+      background-clip: padding-box;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="phone">
+    <header>
+      <div class="titleRow">
+        <a class="back" href="wallet.html" aria-label="Back to Ticket Wallet">←</a>
+        <div class="title">Ticket Details</div>
+      </div>
+    </header>
+
+    <main>
+      <div class="card">
+
+        <!-- TOP MODULE (per your grouping) -->
+        <div class="topGrid">
+          <!-- Row 1, Col 1: Game logo -->
+          <div class="logoTile">
+            <img src="cowboy-draw-logo.png" alt="Cowboy Draw logo">
+          </div>
+
+          <!-- Row 1, Col 2: Purchase Date -->
+          <div class="infoTile">
+            <div class="label">Purchase Date</div>
+            <div class="value">January 20, 2026</div>
+          </div>
+
+          <!-- Row 2, span 2: Ticket Status -->
+          <div class="infoTile span2">
+            <div class="label">Ticket Status</div>
+            <div class="value"><span class="statusPill">Draws Complete</span></div>
+          </div>
+
+          <!-- Row 3, Col 1: Ticket Cost -->
+          <div class="infoTile">
+            <div class="label">Ticket Cost</div>
+            <div class="value">$1</div>
+          </div>
+
+          <!-- Row 3, Col 2: Ticket Winnings -->
+          <div class="infoTile">
+            <div class="label">Ticket Winnings</div>
+            <div class="value winningsBig">$12</div>
+          </div>
+
+          <!-- Row 4, span 2: Draw Date info -->
+          <div class="infoTile span2 drawDateRow">
+            <div class="label">Draw Date</div>
+            <div class="value">
+              <span id="activeDrawDate">January 19, 2026</span>
+              <span class="activePill" id="activeDrawIndex">Draw 1 of 5</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- LOWER MODULE -->
+        <div class="sectionHeader">
+          <h2>Ticket Selections & Matches</h2>
+          <div class="hint">Swipe for other draws</div>
+        </div>
+
+        <div class="drawDeck" id="drawDeck" aria-label="Draw cards (swipe horizontally)">
+
+          <!-- Draw 1 (Mon) - $0 total -->
+          <article class="drawCard" data-date="January 19, 2026" data-index="1">
+            <div class="drawTop">
+              <div>
+                <div class="drawDate">January 19, 2026</div>
+                <div class="drawSub">Monday Drawing</div>
+              </div>
+              <div class="totalChip zero">Total: $0</div>
+            </div>
+
+            <div class="lines">
+              <div class="lineRow">
+                <div class="lineLeft">
+                  <div class="lineTitle">Line 1</div>
+                  <div class="nums">
+                    <div class="ball">3</div><div class="ball">11</div><div class="ball">19</div><div class="ball">28</div><div class="ball">42</div>
+                  </div>
+                </div>
+                <div class="winBadge">$0</div>
+              </div>
+
+              <div class="lineRow">
+                <div class="lineLeft">
+                  <div class="lineTitle">Line 2</div>
+                  <div class="nums">
+                    <div class="ball">6</div><div class="ball">14</div><div class="ball">27</div><div class="ball">33</div><div class="ball">45</div>
+                  </div>
+                </div>
+                <div class="winBadge">$0</div>
+              </div>
+
+              <div class="lineRow">
+                <div class="lineLeft">
+                  <div class="lineTitle">Line 3</div>
+                  <div class="nums">
+                    <div class="ball">1</div><div class="ball">9</div><div class="ball">22</div><div class="ball">37</div><div class="ball">41</div>
+                  </div>
+                </div>
+                <div class="winBadge">$0</div>
+              </div>
+
+              <div class="lineRow">
+                <div class="lineLeft">
+                  <div class="lineTitle">Line 4</div>
+                  <div class="nums">
+                    <div class="ball">7</div><div class="ball">16</div><div class="ball">24</div><div class="ball">30</div><div class="ball">44</div>
+                  </div>
+                </div>
+                <div class="winBadge">$0</div>
+              </div>
+
+              <div class="lineRow">
+                <div class="lineLeft">
+                  <div class="lineTitle">Line 5</div>
+                  <div class="nums">
+                    <div class="ball">4</div><div class="ball">12</div><div class="ball">26</div><div class="ball">35</div><div class="ball">43</div>
+                  </div>
+                </div>
+                <div class="winBadge">$0</div>
+              </div>
+            </div>
+          </article>
+
+          <!-- Draw 2 (Thu) - $5 total (two matches highlighted on winning line) -->
+          <article class="drawCard" data-date="January 22, 2026" data-index="2">
+            <div class="drawTop">
+              <div>
+                <div class="drawDate">January 22, 2026</div>
+                <div class="drawSub">Thursday Drawing</div>
+              </div>
+              <div class="totalChip">Total: $5</div>
+            </div>
+
+            <div class="lines">
+              <div class="lineRow">
+                <div class="lineLeft">
+                  <div class="lineTitle">Line 1</div>
+                  <div class="nums">
+                    <div class="ball">3</div><div class="ball">11</div><div class="ball">19</div><div class="ball">28</div><div class="ball">42</div>
+                  </div>
+                </div>
+                <div class="winBadge">$0</div>
+              </div>
+
+              <div class="lineRow">
+                <div class="lineLeft">
+                  <div class="lineTitle">Line 2</div>
+                  <div class="nums">
+                    <div class="ball">6</div><div class="ball match">14</div><div class="ball">27</div><div class="ball match">33</div><div class="ball">45</div>
+                  </div>
+                </div>
+                <div class="winBadge win">$5</div>
+              </div>
+
+              <div class="lineRow">
+                <div class="lineLeft">
+                  <div class="lineTitle">Line 3</div>
+                  <div class="nums">
+                    <div class="ball">1</div><div class="ball">9</div><div class="ball">22</div><div class="ball">37</div><div class="ball">41</div>
+                  </div>
+                </div>
+                <div class="winBadge">$0</div>
+              </div>
+
+              <div class="lineRow">
+                <div class="lineLeft">
+                  <div class="lineTitle">Line 4</div>
+                  <div class="nums">
+                    <div class="ball">7</div><div class="ball">16</div><div class="ball">24</div><div class="ball">30</div><div class="ball">44</div>
+                  </div>
+                </div>
+                <div class="winBadge">$0</div>
+              </div>
+
+              <div class="lineRow">
+                <div class="lineLeft">
+                  <div class="lineTitle">Line 5</div>
+                  <div class="nums">
+                    <div class="ball">4</div><div class="ball">12</div><div class="ball">26</div><div class="ball">35</div><div class="ball">43</div>
+                  </div>
+                </div>
+                <div class="winBadge">$0</div>
+              </div>
+            </div>
+          </article>
+
+          <!-- Draw 3 (Mon) - $2 total (one match highlighted on winning line) -->
+          <article class="drawCard" data-date="January 26, 2026" data-index="3">
+            <div class="drawTop">
+              <div>
+                <div class="drawDate">January 26, 2026</div>
+                <div class="drawSub">Monday Drawing</div>
+              </div>
+              <div class="totalChip">Total: $2</div>
+            </div>
+
+            <div class="lines">
+              <div class="lineRow">
+                <div class="lineLeft">
+                  <div class="lineTitle">Line 1</div>
+                  <div class="nums">
+                    <div class="ball">3</div><div class="ball">11</div><div class="ball">19</div><div class="ball">28</div><div class="ball">42</div>
+                  </div>
+                </div>
+                <div class="winBadge">$0</div>
+              </div>
+
+              <div class="lineRow">
+                <div class="lineLeft">
+                  <div class="lineTitle">Line 2</div>
+                  <div class="nums">
+                    <div class="ball">6</div><div class="ball">14</div><div class="ball">27</div><div class="ball">33</div><div class="ball">45</div>
+                  </div>
+                </div>
+                <div class="winBadge">$0</div>
+              </div>
+
+              <div class="lineRow">
+                <div class="lineLeft">
+                  <div class="lineTitle">Line 3</div>
+                  <div class="nums">
+                    <div class="ball">1</div><div class="ball match">9</div><div class="ball">22</div><div class="ball">37</div><div class="ball">41</div>
+                  </div>
+                </div>
+                <div class="winBadge win">$2</div>
+              </div>
+
+              <div class="lineRow">
+                <div class="lineLeft">
+                  <div class="lineTitle">Line 4</div>
+                  <div class="nums">
+                    <div class="ball">7</div><div class="ball">16</div><div class="ball">24</div><div class="ball">30</div><div class="ball">44</div>
+                  </div>
+                </div>
+                <div class="winBadge">$0</div>
+              </div>
+
+              <div class="lineRow">
+                <div class="lineLeft">
+                  <div class="lineTitle">Line 5</div>
+                  <div class="nums">
+                    <div class="ball">4</div><div class="ball">12</div><div class="ball">26</div><div class="ball">35</div><div class="ball">43</div>
+                  </div>
+                </div>
+                <div class="winBadge">$0</div>
+              </div>
+            </div>
+          </article>
+
+          <!-- Draw 4 (Thu) - $5 total (two matches highlighted on winning line) -->
+          <article class="drawCard" data-date="January 29, 2026" data-index="4">
+            <div class="drawTop">
+              <div>
+                <div class="drawDate">January 29, 2026</div>
+                <div class="drawSub">Thursday Drawing</div>
+              </div>
+              <div class="totalChip">Total: $5</div>
+            </div>
+
+            <div class="lines">
+              <div class="lineRow">
+                <div class="lineLeft">
+                  <div class="lineTitle">Line 1</div>
+                  <div class="nums">
+                    <div class="ball">3</div><div class="ball">11</div><div class="ball">19</div><div class="ball">28</div><div class="ball">42</div>
+                  </div>
+                </div>
+                <div class="winBadge">$0</div>
+              </div>
+
+              <div class="lineRow">
+                <div class="lineLeft">
+                  <div class="lineTitle">Line 2</div>
+                  <div class="nums">
+                    <div class="ball match">6</div><div class="ball">14</div><div class="ball">27</div><div class="ball">33</div><div class="ball match">45</div>
+                  </div>
+                </div>
+                <div class="winBadge win">$5</div>
+              </div>
+
+              <div class="lineRow">
+                <div class="lineLeft">
+                  <div class="lineTitle">Line 3</div>
+                  <div class="nums">
+                    <div class="ball">1</div><div class="ball">9</div><div class="ball">22</div><div class="ball">37</div><div class="ball">41</div>
+                  </div>
+                </div>
+                <div class="winBadge">$0</div>
+              </div>
+
+              <div class="lineRow">
+                <div class="lineLeft">
+                  <div class="lineTitle">Line 4</div>
+                  <div class="nums">
+                    <div class="ball">7</div><div class="ball">16</div><div class="ball">24</div><div class="ball">30</div><div class="ball">44</div>
+                  </div>
+                </div>
+                <div class="winBadge">$0</div>
+              </div>
+
+              <div class="lineRow">
+                <div class="lineLeft">
+                  <div class="lineTitle">Line 5</div>
+                  <div class="nums">
+                    <div class="ball">4</div><div class="ball">12</div><div class="ball">26</div><div class="ball">35</div><div class="ball">43</div>
+                  </div>
+                </div>
+                <div class="winBadge">$0</div>
+              </div>
+            </div>
+          </article>
+
+          <!-- Draw 5 (Mon) - $0 total -->
+          <article class="drawCard" data-date="February 2, 2026" data-index="5">
+            <div class="drawTop">
+              <div>
+                <div class="drawDate">February 2, 2026</div>
+                <div class="drawSub">Monday Drawing</div>
+              </div>
+              <div class="totalChip zero">Total: $0</div>
+            </div>
+
+            <div class="lines">
+              <div class="lineRow">
+                <div class="lineLeft">
+                  <div class="lineTitle">Line 1</div>
+                  <div class="nums">
+                    <div class="ball">3</div><div class="ball">11</div><div class="ball">19</div><div class="ball">28</div><div class="ball">42</div>
+                  </div>
+                </div>
+                <div class="winBadge">$0</div>
+              </div>
+
+              <div class="lineRow">
+                <div class="lineLeft">
+                  <div class="lineTitle">Line 2</div>
+                  <div class="nums">
+                    <div class="ball">6</div><div class="ball">14</div><div class="ball">27</div><div class="ball">33</div><div class="ball">45</div>
+                  </div>
+                </div>
+                <div class="winBadge">$0</div>
+              </div>
+
+              <div class="lineRow">
+                <div class="lineLeft">
+                  <div class="lineTitle">Line 3</div>
+                  <div class="nums">
+                    <div class="ball">1</div><div class="ball">9</div><div class="ball">22</div><div class="ball">37</div><div class="ball">41</div>
+                  </div>
+                </div>
+                <div class="winBadge">$0</div>
+              </div>
+
+              <div class="lineRow">
+                <div class="lineLeft">
+                  <div class="lineTitle">Line 4</div>
+                  <div class="nums">
+                    <div class="ball">7</div><div class="ball">16</div><div class="ball">24</div><div class="ball">30</div><div class="ball">44</div>
+                  </div>
+                </div>
+                <div class="winBadge">$0</div>
+              </div>
+
+              <div class="lineRow">
+                <div class="lineLeft">
+                  <div class="lineTitle">Line 5</div>
+                  <div class="nums">
+                    <div class="ball">4</div><div class="ball">12</div><div class="ball">26</div><div class="ball">35</div><div class="ball">43</div>
+                  </div>
+                </div>
+                <div class="winBadge">$0</div>
+              </div>
+            </div>
+          </article>
+
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script>
+    // Update Draw Date tile based on the leftmost visible swipe card
+    const deck = document.getElementById('drawDeck');
+    const activeDateEl = document.getElementById('activeDrawDate');
+    const activeIndexEl = document.getElementById('activeDrawIndex');
+
+    function updateActiveFromScroll(){
+      const cards = Array.from(deck.querySelectorAll('.drawCard'));
+      const deckRect = deck.getBoundingClientRect();
+
+      let best = null;
+      let bestDist = Infinity;
+
+      for(const c of cards){
+        const r = c.getBoundingClientRect();
+        const dist = Math.abs(r.left - deckRect.left);
+        if (dist < bestDist){
+          bestDist = dist;
+          best = c;
+        }
+      }
+
+      if (best){
+        activeDateEl.textContent = best.getAttribute('data-date');
+        const idx = best.getAttribute('data-index');
+        activeIndexEl.textContent = `Draw ${idx} of 5`;
+      }
+    }
+
+    let t = null;
+    deck.addEventListener('scroll', () => {
+      window.clearTimeout(t);
+      t = window.setTimeout(updateActiveFromScroll, 60);
+    });
+
+    updateActiveFromScroll();
+  </script>
+</body>
+</html>

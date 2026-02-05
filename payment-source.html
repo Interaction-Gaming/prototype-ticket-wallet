@@ -1,0 +1,385 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Payment Method</title>
+
+  <style>
+    :root{
+      --phone-w:402px;
+      --phone-h:874px;
+    }
+
+    *{ box-sizing:border-box; }
+    body{
+      margin:0;
+      font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","SF Pro Text",Roboto,Arial,sans-serif;
+      background:#111;
+      display:flex;
+      justify-content:center;
+      padding:20px;
+    }
+
+    .phone{
+      width:var(--phone-w);
+      height:var(--phone-h);
+      border-radius:28px;
+      overflow:hidden;
+      background:#f2f2f7;
+      box-shadow:0 20px 60px rgba(0,0,0,.55);
+      display:flex;
+      flex-direction:column;
+    }
+
+    /* iOS-style navigation bar */
+    header{
+      background:#f2f2f7;
+      padding:16px 16px 12px;
+      padding-top:54px;
+      position:relative;
+    }
+
+    .navBar{
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      position:relative;
+      height:32px;
+    }
+
+    .backBtn{
+      position:absolute;
+      left:0;
+      top:50%;
+      transform:translateY(-50%);
+      display:flex;
+      align-items:center;
+      gap:4px;
+      padding:6px 8px;
+      border-radius:8px;
+      text-decoration:none;
+      color:#007aff;
+      font-weight:500;
+      font-size:17px;
+    }
+    .backBtn:hover{ background:rgba(0,122,255,.08); }
+
+    .backBtn svg{
+      width:12px;
+      height:20px;
+      fill:none;
+      stroke:#007aff;
+      stroke-width:3;
+      stroke-linecap:round;
+      stroke-linejoin:round;
+    }
+
+    .navTitle{
+      font-weight:600;
+      font-size:17px;
+      color:#000;
+    }
+
+    main{
+      flex:1;
+      overflow:auto;
+      padding:8px 16px 24px;
+    }
+
+    /* Amount display */
+    .amountSection{
+      text-align:center;
+      padding:24px 0 28px;
+    }
+
+    .amountLabel{
+      font-size:13px;
+      font-weight:500;
+      color:#8e8e93;
+      text-transform:uppercase;
+      letter-spacing:.5px;
+      margin-bottom:6px;
+    }
+
+    .amountValue{
+      font-size:56px;
+      font-weight:700;
+      color:#000;
+      letter-spacing:-2px;
+    }
+
+    .amountNote{
+      font-size:15px;
+      color:#8e8e93;
+      margin-top:8px;
+    }
+
+    /* iOS Card style */
+    .iosCard{
+      background:#fff;
+      border-radius:12px;
+      overflow:hidden;
+      margin-bottom:20px;
+    }
+
+    .cardHeader{
+      padding:12px 16px;
+      font-size:13px;
+      font-weight:500;
+      color:#8e8e93;
+      text-transform:uppercase;
+      letter-spacing:.3px;
+    }
+
+    .paymentOption{
+      display:flex;
+      align-items:center;
+      padding:14px 16px;
+      border-top:1px solid rgba(0,0,0,.08);
+      cursor:pointer;
+      transition: background .15s ease;
+    }
+    .paymentOption:first-child{ border-top:none; }
+    .paymentOption:hover{ background:rgba(0,0,0,.03); }
+    .paymentOption.selected{ background:rgba(0,122,255,.06); }
+
+    .paymentIcon{
+      width:44px;
+      height:28px;
+      border-radius:6px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      margin-right:14px;
+      background:#000;
+    }
+
+    .paymentIcon.apple-pay{
+      background:#000;
+    }
+
+    .paymentIcon svg{
+      height:18px;
+      fill:#fff;
+    }
+
+    .paymentDetails{
+      flex:1;
+    }
+
+    .paymentName{
+      font-size:17px;
+      font-weight:500;
+      color:#000;
+    }
+
+    .paymentSub{
+      font-size:13px;
+      color:#8e8e93;
+      margin-top:2px;
+    }
+
+    .checkmark{
+      width:24px;
+      height:24px;
+      border-radius:50%;
+      background:#007aff;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+    }
+
+    .checkmark svg{
+      width:14px;
+      height:14px;
+      fill:none;
+      stroke:#fff;
+      stroke-width:3;
+      stroke-linecap:round;
+      stroke-linejoin:round;
+    }
+
+    .emptyCheck{
+      width:24px;
+      height:24px;
+      border-radius:50%;
+      border:2px solid #d1d1d6;
+    }
+
+    /* Apple Pay Sheet */
+    .applePaySheet{
+      background:#fff;
+      border-radius:16px;
+      padding:20px;
+      margin-top:8px;
+      box-shadow:0 4px 24px rgba(0,0,0,.12);
+    }
+
+    .sheetRow{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      padding:10px 0;
+      border-bottom:1px solid rgba(0,0,0,.06);
+    }
+    .sheetRow:last-of-type{ border-bottom:none; }
+
+    .sheetLabel{
+      font-size:15px;
+      color:#8e8e93;
+    }
+
+    .sheetValue{
+      font-size:15px;
+      font-weight:600;
+      color:#000;
+    }
+
+    .sheetTotal{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      padding:14px 0 4px;
+      margin-top:8px;
+      border-top:1px solid rgba(0,0,0,.10);
+    }
+
+    .totalLabel{
+      font-size:17px;
+      font-weight:600;
+      color:#000;
+    }
+
+    .totalValue{
+      font-size:22px;
+      font-weight:700;
+      color:#000;
+    }
+
+    /* Apple Pay Button */
+    .applePayBtn{
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      gap:8px;
+      width:100%;
+      padding:16px 24px;
+      margin-top:20px;
+      border:none;
+      border-radius:12px;
+      background:#000;
+      color:#fff;
+      font-size:19px;
+      font-weight:500;
+      cursor:pointer;
+      text-decoration:none;
+      transition: transform .1s ease, opacity .1s ease;
+      -webkit-tap-highlight-color:transparent;
+    }
+
+    .applePayBtn:hover{
+      opacity:.92;
+    }
+
+    .applePayBtn:active{
+      transform:scale(.98);
+      opacity:.88;
+    }
+
+    .applePayBtn svg{
+      height:24px;
+      fill:#fff;
+    }
+
+    .secureNote{
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      gap:6px;
+      margin-top:16px;
+      font-size:13px;
+      color:#8e8e93;
+    }
+
+    .secureNote svg{
+      width:14px;
+      height:14px;
+      fill:#8e8e93;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="phone">
+    <header>
+      <div class="navBar">
+        <a class="backBtn" href="claim-summary.html" aria-label="Back">
+          <svg viewBox="0 0 12 20"><polyline points="10,2 2,10 10,18"/></svg>
+          Back
+        </a>
+        <div class="navTitle">Payment</div>
+      </div>
+    </header>
+
+    <main>
+      <div class="amountSection">
+        <div class="amountLabel">You're Receiving</div>
+        <div class="amountValue">$12.00</div>
+        <div class="amountNote">From Cowboy Draw Winnings</div>
+      </div>
+
+      <div class="iosCard">
+        <div class="paymentOption selected">
+          <div class="paymentIcon apple-pay">
+            <!-- Apple logo -->
+            <svg viewBox="0 0 24 24">
+              <path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.81-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/>
+            </svg>
+          </div>
+          <div class="paymentDetails">
+            <div class="paymentName">Apple Cash</div>
+            <div class="paymentSub">Instant transfer to Apple Wallet</div>
+          </div>
+          <div class="checkmark">
+            <svg viewBox="0 0 24 24"><polyline points="4,12 10,18 20,6"/></svg>
+          </div>
+        </div>
+      </div>
+
+      <div class="applePaySheet">
+        <div class="sheetRow">
+          <span class="sheetLabel">Cowboy Draw Winnings</span>
+          <span class="sheetValue">$12.00</span>
+        </div>
+        <div class="sheetRow">
+          <span class="sheetLabel">Processing Fee</span>
+          <span class="sheetValue">$0.00</span>
+        </div>
+        <div class="sheetRow">
+          <span class="sheetLabel">Transfer Method</span>
+          <span class="sheetValue">Instant</span>
+        </div>
+
+        <div class="sheetTotal">
+          <span class="totalLabel">Total to Apple Cash</span>
+          <span class="totalValue">$12.00</span>
+        </div>
+
+        <a href="claim-complete.html" class="applePayBtn">
+          <!-- Apple Pay wordmark -->
+          <span>Confirm with</span>
+          <svg viewBox="0 0 50 20">
+            <path d="M9.43 5.2c-.56.67-1.47 1.19-2.36 1.11-.11-.89.33-1.84.84-2.42.56-.67 1.55-1.16 2.35-1.2.1.93-.27 1.84-.83 2.51zm.82 1.28c-1.3-.08-2.41.74-3.03.74-.62 0-1.56-.7-2.58-.68-1.33.02-2.56.77-3.24 1.96-1.38 2.4-.36 5.95.98 7.9.66.96 1.44 2.02 2.47 1.98.98-.04 1.36-.64 2.55-.64s1.53.64 2.58.62c1.07-.02 1.74-.96 2.4-1.92.74-1.09 1.05-2.15 1.07-2.2-.02-.02-2.06-.8-2.08-3.15-.02-1.97 1.61-2.91 1.68-2.96-.92-1.35-2.35-1.5-2.85-1.54l.05-.11zm8.24-2.38v14.7h2.27v-5.03h3.14c2.87 0 4.89-1.97 4.89-4.84s-1.99-4.83-4.82-4.83h-5.48zm2.27 1.87h2.61c1.97 0 3.09 1.05 3.09 2.97s-1.12 2.98-3.1 2.98h-2.6V5.97zm12.1 12.93c1.42 0 2.74-.72 3.34-1.86h.05v1.75h2.1V11c0-2.11-1.69-3.47-4.29-3.47-2.41 0-4.2 1.38-4.27 3.28h2.04c.17-.9.99-1.49 2.13-1.49 1.38 0 2.15.64 2.15 1.82v.8l-2.81.17c-2.61.15-4.03 1.23-4.03 3.09 0 1.88 1.47 3.14 3.59 3.14v-.45zm.62-1.72c-1.2 0-1.96-.58-1.96-1.46 0-.91.73-1.44 2.13-1.52l2.5-.15v.82c0 1.35-1.14 2.31-2.67 2.31zm7.27 5.66c2.21 0 3.25-.84 4.16-3.4l3.98-11.16h-2.32l-2.67 8.63h-.05l-2.67-8.63h-2.39l3.84 10.62-.21.65c-.35 1.11-.91 1.54-1.92 1.54-.18 0-.52-.02-.66-.04v1.75c.13.03.69.04.91.04z"/>
+          </svg>
+        </a>
+
+        <div class="secureNote">
+          <svg viewBox="0 0 24 24"><path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z"/></svg>
+          Secured by Apple Pay
+        </div>
+      </div>
+    </main>
+  </div>
+</body>
+</html>

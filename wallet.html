@@ -1,0 +1,568 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ticket Wallet</title>
+
+  <style>
+    :root{
+      --teal-900:#0b2a2a;
+      --teal-800:#0f3a3a;
+      --lime:#c9ea4a;
+
+      --paper:#f6f0e4;
+      --ink:#0f1516;
+
+      --shadow:0 16px 40px rgba(0,0,0,.35);
+
+      --phone-w:402px;
+      --phone-h:874px;
+
+      /* Icon colors (match your example: black on light, grey when disabled) */
+      --icon:#0f1516;
+      --icon-disabled:rgba(0,0,0,.38);
+      --icon-cutout:#ffffff; /* $ sign cutout */
+    }
+
+    *{ box-sizing:border-box; }
+    body{
+      margin:0;
+      font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;
+      background:#111;
+      display:flex;
+      justify-content:center;
+      padding:20px;
+    }
+
+    .phone{
+      width:var(--phone-w);
+      height:var(--phone-h);
+      border-radius:28px;
+      overflow:hidden;
+      background:linear-gradient(180deg,var(--teal-900), var(--teal-800) 34%, #0b2323 55%, #0a1d1d);
+      box-shadow:0 20px 60px rgba(0,0,0,.55);
+      display:flex;
+      flex-direction:column;
+      color:#fff;
+    }
+
+    header{
+      padding:18px 16px 14px;
+      padding-top:42px;
+      border-bottom:2px solid rgba(201,234,74,.85);
+      position:relative;
+    }
+
+    .titleRow{
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      position:relative;
+      height:28px;
+    }
+
+    .back{
+      position:absolute;
+      left:0;
+      top:50%;
+      transform:translateY(-50%);
+      display:flex;
+      align-items:center;
+      padding:8px 10px;
+      border-radius:12px;
+      text-decoration:none;
+      color:rgba(255,255,255,.92);
+      font-weight:900;
+      font-size:14px;
+    }
+    .back:hover{ background:rgba(255,255,255,.08); }
+
+    .title{
+      font-weight:900;
+      letter-spacing:.2px;
+      font-size:18px;
+    }
+
+    main{
+      flex:1;
+      overflow:auto;
+      padding:14px 14px 18px;
+      background:
+        radial-gradient(1200px 700px at 50% 0%, rgba(255,255,255,.10), rgba(255,255,255,0) 55%),
+        linear-gradient(180deg, rgba(0,0,0,.12), rgba(0,0,0,.38));
+    }
+
+    .container{
+      background:rgba(255,255,255,.06);
+      border:1px solid rgba(255,255,255,.12);
+      border-radius:22px;
+      padding:12px;
+      box-shadow:var(--shadow);
+      backdrop-filter: blur(6px);
+    }
+
+    .sectionLabel{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      padding:6px 6px 10px;
+      gap:10px;
+    }
+    .sectionLabel h2{
+      margin:0;
+      font-size:14px;
+      font-weight:900;
+      letter-spacing:.2px;
+      color:rgba(255,255,255,.92);
+    }
+    .sectionLabel .hint{
+      font-size:12px;
+      font-weight:700;
+      color:rgba(255,255,255,.65);
+    }
+
+    /* ----- Ticket Card ----- */
+    .ticketCard{
+      background:var(--paper);
+      color:var(--ink);
+      border-radius:18px;
+      padding:12px;
+      box-shadow:0 14px 28px rgba(0,0,0,.22);
+      margin:10px 0;
+    }
+
+    .cardTop{
+      display:flex;
+      align-items:flex-start;
+      justify-content:space-between;
+      gap:10px;
+      margin-bottom:10px;
+    }
+
+    .logoWrap{
+      width:116px;
+      height:52px;
+      border-radius:14px;
+      overflow:hidden;
+      background:#fff;
+      border:1px solid rgba(0,0,0,.08);
+      flex:0 0 auto;
+    }
+    .logoWrap img{
+      width:100%;
+      height:100%;
+      object-fit:cover;
+      display:block;
+    }
+
+    .badge{
+      font-size:12px;
+      font-weight:900;
+      padding:6px 10px;
+      border-radius:999px;
+      letter-spacing:.15px;
+      border:1px solid rgba(0,0,0,.08);
+      background:#fff;
+      white-space:nowrap;
+      flex:0 0 auto;
+    }
+    .badge.open{ background:rgba(15,92,87,.12); color:#0f5c57; }
+    .badge.complete{ background:rgba(0,0,0,.08); color:rgba(0,0,0,.70); }
+    .badge.paid{ background:rgba(38,142,63,.14); color:#1f7a37; }
+    .badge.expired{ background:rgba(163,52,36,.12); color:#a33424; }
+
+    /* Middle actions */
+    .actionGrid{
+      display:grid;
+      grid-template-columns:repeat(3, 1fr);
+      gap:10px;
+      margin:10px 0 12px;
+    }
+
+    .miniAction{
+      border:1px solid rgba(0,0,0,.10);
+      background:rgba(255,255,255,.62);
+      border-radius:16px;
+      padding:10px 8px;
+      cursor:pointer;
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      justify-content:center;
+      gap:8px;
+      min-height:88px;
+      transition: transform .08s ease, background .12s ease, opacity .12s ease;
+    }
+    .miniAction:hover{ background:rgba(255,255,255,.72); }
+    .miniAction:active{ transform:translateY(1px); }
+
+    /* Disabled Cash Out for Paid/Expired */
+    .miniAction.disabled{
+      cursor:not-allowed;
+      opacity:.45;
+      background:rgba(255,255,255,.50);
+      transform:none;
+    }
+    .miniAction.disabled:hover{ background:rgba(255,255,255,.50); }
+    .miniAction.disabled:active{ transform:none; }
+
+    /* Icon container + icon style (match your examples: bold, simple, consistent) */
+    .miniIcon{
+      width:44px;
+      height:44px;
+      border-radius:14px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      background:rgba(0,0,0,.03);
+      border:1px solid rgba(0,0,0,.10);
+      box-shadow:0 10px 18px rgba(0,0,0,.08);
+      color:var(--icon);
+    }
+    .miniIcon svg{
+      width:30px;
+      height:30px;
+      display:block;
+    }
+
+        .iconImg{
+  width:30px;
+  height:30px;
+  object-fit:contain;
+  display:block;
+    }
+
+    /* if your PNGs have a lot of whitespace, bump to 34px */
+    .miniIcon .iconImg{ width:34px; height:34px; }
+
+    .miniAction.disabled .iconImg{
+    opacity:.45;
+    filter: grayscale(100%);
+    }
+
+    /* default: stroke-based icons use currentColor */
+    .strokeIcon{
+      fill:none;
+      stroke:currentColor;
+      stroke-linecap:round;
+      stroke-linejoin:round;
+      vector-effect:non-scaling-stroke;
+    }
+
+    /* default: filled icons use currentColor */
+    .fillIcon{
+      fill:currentColor;
+      stroke:none;
+    }
+
+    .miniAction.disabled .miniIcon{
+      background:rgba(0,0,0,.02);
+      border-color:rgba(0,0,0,.08);
+      box-shadow:none;
+      color:var(--icon-disabled);
+    }
+
+    .miniLabel{
+      font-size:12px;
+      font-weight:900;
+      color:rgba(0,0,0,.78);
+      text-align:center;
+      line-height:1.1;
+      white-space:nowrap;
+    }
+    .miniAction.disabled .miniLabel{ color:rgba(0,0,0,.50); }
+
+    /* Bottom metrics */
+    .cardBottom{
+      display:flex;
+      align-items:flex-end;
+      justify-content:space-between;
+      gap:12px;
+      padding-top:10px;
+      border-top:1px solid rgba(0,0,0,.08);
+    }
+
+    .metricLabel{
+      font-size:10px;
+      font-weight:900;
+      letter-spacing:.25px;
+      color:rgba(0,0,0,.55);
+      text-transform:uppercase;
+      margin-bottom:4px;
+    }
+
+    .metricValue{
+      font-size:14px;
+      font-weight:900;
+      color:rgba(0,0,0,.82);
+    }
+
+    .winningsValue{
+      font-size:16px;
+      font-weight:1000;
+      color:#0f5c57;
+    }
+    .winningsValue.zero{
+      color:rgba(0,0,0,.55);
+      font-weight:900;
+    }
+
+    main::-webkit-scrollbar{ width:10px; }
+    main::-webkit-scrollbar-thumb{
+      background:rgba(255,255,255,.18);
+      border-radius:999px;
+      border:2px solid rgba(0,0,0,0);
+      background-clip: padding-box;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="phone">
+    <header>
+      <div class="titleRow">
+        <a class="back" href="index.html" aria-label="Back to Ticket Scanner">←</a>
+        <div class="title">Ticket Wallet</div>
+      </div>
+    </header>
+
+    <main>
+      <div class="container">
+        <div class="sectionLabel">
+          <h2>Saved Tickets</h2>
+          <div class="hint">Scroll to view more</div>
+        </div>
+
+        <!-- Reusable action button markup -->
+        <template id="actions">
+            <button class="miniAction" type="button" data-action="buy">
+                <div class="miniIcon" aria-hidden="true">
+                <img class="iconImg" src="icon-refresh.png" alt="">
+                </div>
+                <div class="miniLabel">Buy Again</div>
+            </button>
+
+            <button class="miniAction" type="button" data-action="cash">
+                <div class="miniIcon" aria-hidden="true">
+                <img class="iconImg" src="icon-cash.png" alt="">
+                </div>
+                <div class="miniLabel">Cash Out</div>
+            </button>
+
+            <button class="miniAction" type="button" data-action="more">
+                <div class="miniIcon" aria-hidden="true">
+                <img class="iconImg" src="icon-more.png" alt="">
+                </div>
+                <div class="miniLabel">View Ticket</div>
+            </button>
+        </template>
+
+        <script>
+          // helper to render action row and optionally disable cash out
+          function renderActions(disableCashOut){
+            const t = document.getElementById('actions');
+            const frag = t.content.cloneNode(true);
+            if(disableCashOut){
+              const cashBtn = frag.querySelector('[data-action="cash"]');
+              cashBtn.classList.add('disabled');
+              cashBtn.setAttribute('aria-disabled','true');
+              cashBtn.setAttribute('tabindex','-1');
+              cashBtn.type = 'button';
+            }
+            return frag;
+          }
+        </script>
+
+        <!-- 2 by 2 (Draws Open) -->
+        <article class="ticketCard">
+          <div class="cardTop">
+            <div class="logoWrap"><img src="2-by-2-logo.png" alt="2 by 2 logo"></div>
+            <span class="badge open">Draws Open</span>
+          </div>
+
+          <div class="actionGrid" id="a1"></div>
+
+          <div class="cardBottom">
+            <div>
+              <div class="metricLabel">Ticket Cost</div>
+              <div class="metricValue">$5</div>
+            </div>
+            <div style="text-align:right;">
+              <div class="metricLabel">Ticket Winnings</div>
+              <div class="metricValue winningsValue zero">$0</div>
+            </div>
+          </div>
+        </article>
+
+        <!-- Cowboy Draw (Complete) -->
+        <article class="ticketCard" data-game="cowboy">
+          <div class="cardTop">
+            <div class="logoWrap"><img src="cowboy-draw-logo.png" alt="Cowboy Draw logo"></div>
+            <span class="badge complete">Draws Complete</span>
+          </div>
+
+          <div class="actionGrid" id="a2"></div>
+
+          <div class="cardBottom">
+            <div>
+              <div class="metricLabel">Ticket Cost</div>
+              <div class="metricValue">$1</div>
+            </div>
+            <div style="text-align:right;">
+              <div class="metricLabel">Ticket Winnings</div>
+              <div class="metricValue winningsValue">$12</div>
+            </div>
+           </div>
+        </article>
+
+        <!-- Powerball (Paid) — Cash Out disabled -->
+        <article class="ticketCard" data-game="powerball">
+          <div class="cardTop">
+            <div class="logoWrap"><img src="powerball-logo.png" alt="Powerball logo"></div>
+            <span class="badge paid">Paid</span>
+          </div>
+
+          <div class="actionGrid" id="a3"></div>
+
+          <div class="cardBottom">
+            <div>
+              <div class="metricLabel">Ticket Cost</div>
+              <div class="metricValue">$10</div>
+            </div>
+            <div style="text-align:right;">
+              <div class="metricLabel">Ticket Winnings</div>
+              <div class="metricValue winningsValue">$250</div>
+            </div>
+          </div>
+        </article>
+
+        <!-- Mega Millions (Open) -->
+        <article class="ticketCard">
+          <div class="cardTop">
+            <div class="logoWrap"><img src="mega-millions-logo.png" alt="Mega Millions logo"></div>
+            <span class="badge open">Draws Open</span>
+          </div>
+
+          <div class="actionGrid" id="a4"></div>
+
+          <div class="cardBottom">
+            <div>
+              <div class="metricLabel">Ticket Cost</div>
+              <div class="metricValue">$20</div>
+            </div>
+            <div style="text-align:right;">
+              <div class="metricLabel">Ticket Winnings</div>
+              <div class="metricValue winningsValue zero">$0</div>
+            </div>
+          </div>
+        </article>
+
+        <!-- Keno (Expired) — Cash Out disabled -->
+        <article class="ticketCard" data-game="keno">
+          <div class="cardTop">
+            <div class="logoWrap"><img src="keno-logo.png" alt="Keno logo"></div>
+            <span class="badge expired">Expired</span>
+          </div>
+
+          <div class="actionGrid" id="a5"></div>
+
+          <div class="cardBottom">
+            <div>
+              <div class="metricLabel">Ticket Cost</div>
+              <div class="metricValue">$1</div>
+            </div>
+            <div style="text-align:right;">
+              <div class="metricLabel">Ticket Winnings</div>
+              <div class="metricValue winningsValue zero">$0</div>
+            </div>
+          </div>
+        </article>
+
+      </div>
+    </main>
+  </div>
+
+  <script>
+    // Render actions into each card
+    document.getElementById('a1').appendChild(renderActions(false));
+    document.getElementById('a2').appendChild(renderActions(false));
+    document.getElementById('a3').appendChild(renderActions(true));  // Paid
+    document.getElementById('a4').appendChild(renderActions(false));
+    document.getElementById('a5').appendChild(renderActions(true));  // Expired
+
+    // Click hooks (disabled buttons ignored)
+    document.querySelectorAll('.miniAction').forEach(btn => {
+      if (btn.classList.contains('disabled')) return;
+      btn.addEventListener('click', () => {
+        const label = btn.querySelector('.miniLabel')?.textContent?.trim() || 'Action';
+       if (btn.getAttribute('data-action') === 'more') return; // <-- stops the warning for "More"
+        if (btn.getAttribute('data-action') === 'cash') return; // <-- stops the warning for "Cash"
+        if (btn.getAttribute('data-action') === 'buy') return; // <-- stops the warning for "Buy"
+        alert(label + ' (this action is not wired up in the demo)');
+      });
+    });
+  </script>
+  <script>
+  const cowboyViewMore = document.getElementById('cowboyViewMore');
+  if (cowboyViewMore) {
+    cowboyViewMore.addEventListener('click', () => {
+      window.location.href = 'ticket-details.html';
+    });
+  }
+</script>
+
+<script>
+  // Cowboy Draw: View More → Ticket Details, Cash Out → Claim Approved
+  const cowboyCard = document.querySelector('.ticketCard[data-game="cowboy"]');
+
+  if (cowboyCard) {
+    const cowboyMore = cowboyCard.querySelector('[data-action="more"]:not(.disabled)');
+    const cowboyCashOut = cowboyCard.querySelector('[data-action="cash"]:not(.disabled)');
+
+    if (cowboyMore) {
+      cowboyMore.addEventListener('click', () => {
+        window.location.href = 'ticket-details.html';
+      });
+    }
+
+    if (cowboyCashOut) {
+      cowboyCashOut.addEventListener('click', () => {
+        window.location.href = 'claim-summary.html';
+      });
+    }
+  }
+</script>
+
+<script>
+  // Wire "View More" on the Keno card to Watch Ticket screen
+    const kenoCard = document.querySelector('.ticketCard[data-game="keno"]');
+
+  if (kenoCard) {
+    const kenoViewMore = kenoCard.querySelector('[data-action="more"]:not(.disabled)');
+
+    if (kenoViewMore) {
+      kenoViewMore.addEventListener('click', () => {
+        window.location.href = 'watch-ticket.html';
+      });
+    }
+  }
+</script>
+
+<script>
+  // Powerball: Buy Again → Mobile Playslip
+  const powerballCard = document.querySelector('.ticketCard[data-game="powerball"]');
+
+  if (powerballCard) {
+    const powerballBuyAgain = powerballCard.querySelector('[data-action="buy"]:not(.disabled)');
+
+    if (powerballBuyAgain) {
+      powerballBuyAgain.addEventListener('click', () => {
+        window.location.href = 'mobile-playslip.html';
+      });
+    }
+  }
+</script>
+
+</body>
+</html>

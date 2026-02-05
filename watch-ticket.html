@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Watch Ticket</title>
+
+  <style>
+    *{ box-sizing:border-box; }
+
+    body{
+      margin:0;
+      background:#000;
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      height:100vh;
+    }
+
+    /* Phone-sized viewport to match your other screens */
+    .phone{
+      width:402px;
+      height:874px;
+      position:relative;
+      overflow:hidden;
+      background:#000;
+    }
+
+    /* Fullscreen PNG */
+    .watch-image{
+      width:100%;
+      height:100%;
+      object-fit:cover;
+      display:block;
+      user-select:none;
+      -webkit-user-drag:none;
+    }
+
+    /* Clickable X hotspot (aligned to the image’s X position) */
+    .close-btn{
+      position:absolute;
+      top:70px;
+      left:12px;
+      width:44px;
+      height:44px;
+      cursor:pointer;
+      border-radius:50%;
+      background:transparent;
+    }
+
+    /* Optional: subtle tap feedback for prototyping */
+    .close-btn:active{
+      background:rgba(0,0,0,.15);
+    }
+  </style>
+</head>
+
+<body>
+  <div class="phone">
+    <!-- Full screen modal image -->
+    <img
+      src="k2g-ticket.PNG"
+      alt="Watch Ticket Screen"
+      class="watch-image"
+    />
+
+    <!-- X button hotspot -->
+    <a
+      href="wallet.html"
+      class="close-btn"
+      aria-label="Close and return to Ticket Details"
+    ></a>
+  </div>
+</body>
+</html>

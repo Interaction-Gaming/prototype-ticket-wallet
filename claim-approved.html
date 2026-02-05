@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Claim Approved</title>
+
+  <style>
+    *{ box-sizing:border-box; }
+
+    body{
+      margin:0;
+      background:#000;
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      height:100vh;
+      font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;
+    }
+
+    /* Phone-sized canvas */
+    .phone{
+      width:402px;
+      height:874px;
+      position:relative;
+      overflow:hidden;
+      background:#000;
+    }
+
+    /* Fullscreen image */
+    .claim-image{
+      width:100%;
+      height:100%;
+      object-fit:cover;
+      display:block;
+      user-select:none;
+      -webkit-user-drag:none;
+    }
+
+    /* Visible Close Button */
+    .close-btn{
+      position:absolute;
+      top:28px;
+      left:16px;
+      width:44px;
+      height:44px;
+      border-radius:999px;
+      background:rgba(0,0,0,.35);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      cursor:pointer;
+      text-decoration:none;
+      backdrop-filter: blur(4px);
+    }
+
+    .close-btn:hover{
+      background:rgba(0,0,0,.45);
+    }
+
+    .close-btn:active{
+      background:rgba(0,0,0,.55);
+      transform:scale(.96);
+    }
+
+    /* X icon */
+    .close-btn svg{
+      width:18px;
+      height:18px;
+      stroke:#fff;
+      stroke-width:3;
+      stroke-linecap:round;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="phone">
+    <!-- Background illustration -->
+    <img
+      src="mobile-claim.png"
+      alt="Claim Approved"
+      class="claim-image"
+    />
+
+    <!-- Visible Close Button -->
+    <a
+      href="wallet.html"
+      class="close-btn"
+      aria-label="Close and return to Ticket Wallet"
+    >
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <line x1="6" y1="6" x2="18" y2="18" />
+        <line x1="18" y1="6" x2="6" y2="18" />
+      </svg>
+    </a>
+  </div>
+</body>
+</html>

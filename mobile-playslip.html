@@ -1,0 +1,372 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Mobile Playslip</title>
+
+  <style>
+    :root{
+      --phone-w:402px;
+      --phone-h:874px;
+      --bg:#f4f4f4;
+      --card-bg:#fff;
+      --text-primary:rgba(0,0,0,.87);
+      --text-secondary:rgba(0,0,0,.55);
+      --text-tertiary:rgba(0,0,0,.38);
+      --border:rgba(0,0,0,.08);
+      --powerball-red:#e63329;
+    }
+
+    *{ box-sizing:border-box; }
+    body{
+      margin:0;
+      font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","SF Pro Text","Segoe UI",Roboto,Arial,sans-serif;
+      background:#111;
+      display:flex;
+      justify-content:center;
+      padding:20px;
+    }
+
+    .phone{
+      width:var(--phone-w);
+      height:var(--phone-h);
+      border-radius:28px;
+      overflow:hidden;
+      background:var(--bg);
+      box-shadow:0 20px 60px rgba(0,0,0,.55);
+      display:flex;
+      flex-direction:column;
+      position:relative;
+    }
+
+    /* Header area */
+    header{
+      padding:20px 16px 12px;
+      padding-top:54px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+    }
+
+    .close-btn{
+      width:42px;
+      height:42px;
+      border-radius:50%;
+      background:rgba(255,255,255,.85);
+      border:1px solid var(--border);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      cursor:pointer;
+      text-decoration:none;
+      transition: background .15s ease;
+    }
+
+    .close-btn:hover{
+      background:#fff;
+    }
+
+    .close-btn:active{
+      transform:scale(.96);
+    }
+
+    .close-btn svg{
+      width:18px;
+      height:18px;
+      stroke:#000;
+      stroke-width:2.5;
+      stroke-linecap:round;
+    }
+
+    /* Spacer to balance the header */
+    .header-spacer{
+      width:42px;
+    }
+
+    /* Main content */
+    main{
+      flex:1;
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      padding:0 20px;
+      overflow:hidden;
+    }
+
+    /* QR Code Card */
+    .qr-card{
+      background:var(--card-bg);
+      border-radius:20px;
+      padding:24px;
+      box-shadow:0 4px 20px rgba(0,0,0,.08);
+      width:100%;
+      max-width:340px;
+      margin-bottom:20px;
+    }
+
+    .qr-container{
+      width:100%;
+      aspect-ratio:1;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      background:#fff;
+    }
+
+    /* QR Code image */
+    .qr-code{
+      width:100%;
+      height:100%;
+      object-fit:contain;
+    }
+
+    /* Ticket info row */
+    .ticket-info{
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      gap:8px;
+      padding:16px 0 12px;
+      border-bottom:1px solid var(--border);
+      margin-bottom:12px;
+    }
+
+    .ticket-amount{
+      font-size:17px;
+      font-weight:700;
+      color:var(--text-primary);
+    }
+
+    .dot-separator{
+      width:4px;
+      height:4px;
+      border-radius:50%;
+      background:var(--text-tertiary);
+    }
+
+    .game-tag{
+      display:flex;
+      align-items:center;
+      gap:6px;
+      font-size:15px;
+      font-weight:600;
+      color:var(--text-primary);
+    }
+
+    .game-dot{
+      width:10px;
+      height:10px;
+      border-radius:50%;
+    }
+
+    .game-dot.powerball{
+      background:var(--powerball-red);
+    }
+
+    /* Instructions */
+    .instructions{
+      font-size:13px;
+      line-height:1.45;
+      color:var(--text-secondary);
+      text-align:left;
+      padding-right:40px;
+      position:relative;
+    }
+
+    .more-btn{
+      position:absolute;
+      right:-8px;
+      top:50%;
+      transform:translateY(-50%);
+      width:40px;
+      height:40px;
+      border-radius:50%;
+      background:transparent;
+      border:1px solid var(--border);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      cursor:pointer;
+      transition: background .15s ease;
+    }
+
+    .more-btn:hover{
+      background:rgba(0,0,0,.04);
+    }
+
+    .more-btn svg{
+      width:20px;
+      height:20px;
+      fill:var(--text-secondary);
+    }
+
+    /* Navigation */
+    .navigation{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      width:100%;
+      max-width:340px;
+      padding:20px 0;
+      margin-top:auto;
+      margin-left:auto;
+      margin-right:auto;
+    }
+
+    .nav-btn{
+      width:48px;
+      height:48px;
+      border-radius:50%;
+      background:var(--card-bg);
+      border:1px solid var(--border);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      cursor:pointer;
+      transition: background .15s ease, transform .1s ease;
+      box-shadow:0 2px 8px rgba(0,0,0,.06);
+    }
+
+    .nav-btn:hover{
+      background:#fff;
+    }
+
+    .nav-btn:active{
+      transform:scale(.95);
+    }
+
+    .nav-btn svg{
+      width:20px;
+      height:20px;
+      fill:none;
+      stroke:var(--text-secondary);
+      stroke-width:2.5;
+      stroke-linecap:round;
+      stroke-linejoin:round;
+    }
+
+    /* Pagination */
+    .pagination{
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      gap:10px;
+    }
+
+    .pagination-dots{
+      display:flex;
+      align-items:center;
+      gap:8px;
+    }
+
+    .pagination-dot{
+      width:8px;
+      height:8px;
+      border-radius:50%;
+      background:var(--text-tertiary);
+      opacity:.4;
+      transition: opacity .2s ease, transform .2s ease;
+    }
+
+    .pagination-dot.active{
+      opacity:1;
+      background:#f5a623;
+      transform:scale(1.1);
+    }
+
+    .pagination-text{
+      font-size:15px;
+      font-weight:600;
+      color:var(--text-primary);
+    }
+
+    /* Footer */
+    footer{
+      padding:16px 20px 32px;
+      text-align:center;
+    }
+
+    .total-text{
+      font-size:15px;
+      color:var(--text-secondary);
+    }
+
+    .total-amount{
+      font-weight:700;
+      color:var(--text-primary);
+    }
+  </style>
+</head>
+
+<body>
+  <div class="phone">
+    <header>
+      <a href="wallet.html" class="close-btn" aria-label="Close">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <line x1="6" y1="6" x2="18" y2="18" />
+          <line x1="18" y1="6" x2="6" y2="18" />
+        </svg>
+      </a>
+      <div class="header-spacer"></div>
+    </header>
+
+    <main>
+      <div class="qr-card">
+        <div class="qr-container">
+          <img class="qr-code" src="qr-code.png" alt="QR Code for lottery ticket purchase">
+        </div>
+
+        <div class="ticket-info">
+          <span class="ticket-amount">$10.00</span>
+          <span class="dot-separator"></span>
+          <span class="game-tag">
+            <span class="game-dot powerball"></span>
+            Powerball
+          </span>
+        </div>
+
+        <div class="instructions">
+          Present this code and scan to purchase at any participating lottery retailer. Any promotions will be applied by the terminal at the time of QR code scan.
+          <button class="more-btn" aria-label="More options">
+            <svg viewBox="0 0 24 24">
+              <circle cx="12" cy="5" r="2"/>
+              <circle cx="12" cy="12" r="2"/>
+              <circle cx="12" cy="19" r="2"/>
+            </svg>
+          </button>
+        </div>
+      </div>
+    </main>
+
+    <div class="navigation">
+      <button class="nav-btn" aria-label="Previous">
+        <svg viewBox="0 0 24 24">
+          <polyline points="15,6 9,12 15,18"/>
+        </svg>
+      </button>
+
+      <div class="pagination">
+        <div class="pagination-dots">
+          <span class="pagination-dot"></span>
+          <span class="pagination-dot active"></span>
+          <span class="pagination-dot"></span>
+          <span class="pagination-dot"></span>
+          <span class="pagination-dot"></span>
+        </div>
+        <span class="pagination-text">2 of 5</span>
+      </div>
+
+      <button class="nav-btn" aria-label="Next">
+        <svg viewBox="0 0 24 24">
+          <polyline points="9,6 15,12 9,18"/>
+        </svg>
+      </button>
+    </div>
+
+    <footer>
+      <span class="total-text">Total for all QR codes <span class="total-amount">$60.00</span></span>
+    </footer>
+  </div>
+</body>
+</html>

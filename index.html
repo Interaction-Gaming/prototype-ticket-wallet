@@ -1,0 +1,130 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ticket Scanner Prototype</title>
+
+  <style>
+    body{
+      margin:0;
+      font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;
+      background:#111;
+      display:flex;
+      justify-content:center;
+      padding:20px;
+    }
+
+    /* Match your screenshot dimensions exactly (TicketScannerCurrent.png = 402x874) */
+    .phone{
+      width:402px;
+      height:874px;
+      position:relative;
+      overflow:hidden;
+      border-radius:28px;
+      box-shadow:0 20px 60px rgba(0,0,0,.55);
+      background:#000;
+    }
+
+    .base-screen{
+      position:absolute;
+      inset:0;
+      width:100%;
+      height:100%;
+      object-fit:cover;
+      user-select:none;
+      -webkit-user-drag:none;
+    }
+
+    /* --- OVERLAYS --- */
+
+    /* 1) Ticket Result Message body copy (inside the empty message box under "MEGA MILLIONS") */
+    .ticket-result-message{
+      position:absolute;
+
+      /* Tuned to land inside the empty box area under "Mega Millions" */
+      left:44px;
+      top:546px;
+      width:314px;
+
+      font-size:14px;
+      line-height:1.32;
+      color:rgba(0,0,0,.72);
+    }
+
+    /* 2) Callout row: left bold text + right green button (inside the lower empty box) */
+    .callout-text{
+      position:absolute;
+
+      /* Anchored to the visual centerline of the lower row */
+      left:44px;
+      top:708px;
+      transform:translateY(-50%);
+      width:220px;
+
+      font-size:15px;
+      font-weight:800;
+      color:rgba(0,0,0,.82);
+
+      white-space:nowrap;
+      overflow:hidden;
+      text-overflow:ellipsis;
+    }
+
+    .action-btn{
+      position:absolute;
+
+      /* Tuned to sit exactly where the existing teal pill button appears */
+      left:250px;
+      top:708px;
+      transform:translateY(-50%);
+
+      height:40px;
+      min-width:92px;
+      padding:0 14px;
+
+      border:0;
+      border-radius:999px;
+      background:#0f5c57;
+      color:#fff;
+
+      font-size:15px;
+      font-weight:800;
+      letter-spacing:.1px;
+      cursor:pointer;
+
+      box-shadow:0 10px 20px rgba(0,0,0,.12);
+    }
+
+    .action-btn:active{ transform:translateY(calc(-50% + 1px)); }
+
+    .action-btn{
+  text-decoration:none;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+
+
+    /* Optional: if you want the overlays not to block the screen except the button */
+    .ticket-result-message,
+    .callout-text{ pointer-events:none; }
+  </style>
+</head>
+
+<body>
+  <div class="phone">
+    <!-- Your new reference image should be saved as TicketScannerCurrent.png in the same folder -->
+    <img class="base-screen" src="TicketScannerCurrent.png" alt="Ticket Scanner screen" />
+
+    <!-- Ticket Result Message -->
+    <div class="ticket-result-message">
+      Drawings have not occurred yet. You can save this ticket to be notified automatically if it wins and be eligible for mobile cashing
+    </div>
+
+    <!-- Callout Text + Action Button -->
+    <div class="callout-text">Save to your Ticket Wallet</div>
+    <a class="action-btn" href="wallet.html">+ Add</a>
+  </div>
+</body>
+</html>
