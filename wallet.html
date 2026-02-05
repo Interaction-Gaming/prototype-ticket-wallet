@@ -619,12 +619,12 @@
 
   <script>
     // Render actions into each card
-    document.getElementById('a1').appendChild(renderActions(false));
-    document.getElementById('a2').appendChild(renderActions(false));
-    document.getElementById('a3').appendChild(renderActions(true));  // Paid
-    document.getElementById('a4').appendChild(renderActions(false));
-    document.getElementById('a5').appendChild(renderActions(true, true));  // Expired - all disabled
-    document.getElementById('a6').appendChild(renderActions(false)); // Keno Open
+    document.getElementById('a1').appendChild(renderActions(true));  // 2by2 - Cash Out disabled
+    document.getElementById('a2').appendChild(renderActions(false)); // Cowboy - Cash Out enabled
+    document.getElementById('a3').appendChild(renderActions(true));  // Powerball Paid - Cash Out disabled
+    document.getElementById('a4').appendChild(renderActions(true));  // Mega Millions - Cash Out disabled
+    document.getElementById('a5').appendChild(renderActions(true, true));  // Keno Expired - all disabled
+    document.getElementById('a6').appendChild(renderActions(true)); // Keno Open - Cash Out disabled
 
     // Click hooks (disabled buttons ignored)
     document.querySelectorAll('.miniAction').forEach(btn => {
@@ -710,24 +710,16 @@
     if (e.target === this) closeKenoModal();
   });
 
-  // Wire "View Ticket" and "Cash Out" on the Keno (Draws Open) card
+  // Wire "View Ticket" on the Keno (Draws Open) card
   const kenoOpenCard = document.querySelector('.ticketCard[data-game="keno-open"]');
 
   if (kenoOpenCard) {
     const kenoOpenViewMore = kenoOpenCard.querySelector('[data-action="more"]:not(.disabled)');
-    const kenoOpenCashOut = kenoOpenCard.querySelector('[data-action="cash"]:not(.disabled)');
 
     if (kenoOpenViewMore) {
       kenoOpenViewMore.classList.add('has-destination');
       kenoOpenViewMore.addEventListener('click', () => {
         openKenoModal();
-      });
-    }
-
-    if (kenoOpenCashOut) {
-      kenoOpenCashOut.classList.add('has-destination');
-      kenoOpenCashOut.addEventListener('click', () => {
-        window.location.href = 'claim-summary.html';
       });
     }
   }
