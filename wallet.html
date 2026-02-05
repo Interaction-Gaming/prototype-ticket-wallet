@@ -465,8 +465,8 @@
         </template>
 
         <script>
-          // helper to render action row and optionally disable cash out
-          function renderActions(disableCashOut){
+          // helper to render action row and optionally disable cash out and/or view ticket
+          function renderActions(disableCashOut, disableViewTicket){
             const t = document.getElementById('actions');
             const frag = t.content.cloneNode(true);
             if(disableCashOut){
@@ -475,6 +475,13 @@
               cashBtn.setAttribute('aria-disabled','true');
               cashBtn.setAttribute('tabindex','-1');
               cashBtn.type = 'button';
+            }
+            if(disableViewTicket){
+              const moreBtn = frag.querySelector('[data-action="more"]');
+              moreBtn.classList.add('disabled');
+              moreBtn.setAttribute('aria-disabled','true');
+              moreBtn.setAttribute('tabindex','-1');
+              moreBtn.type = 'button';
             }
             return frag;
           }
@@ -616,7 +623,7 @@
     document.getElementById('a2').appendChild(renderActions(false));
     document.getElementById('a3').appendChild(renderActions(true));  // Paid
     document.getElementById('a4').appendChild(renderActions(false));
-    document.getElementById('a5').appendChild(renderActions(true));  // Expired
+    document.getElementById('a5').appendChild(renderActions(true, true));  // Expired - all disabled
     document.getElementById('a6').appendChild(renderActions(false)); // Keno Open
 
     // Click hooks (disabled buttons ignored)
@@ -702,20 +709,6 @@
   document.getElementById('kenoModal').addEventListener('click', function(e) {
     if (e.target === this) closeKenoModal();
   });
-
-  // Wire "View Ticket" on the Keno (Expired) card to open modal
-  const kenoCard = document.querySelector('.ticketCard[data-game="keno"]');
-
-  if (kenoCard) {
-    const kenoViewMore = kenoCard.querySelector('[data-action="more"]:not(.disabled)');
-
-    if (kenoViewMore) {
-      kenoViewMore.classList.add('has-destination');
-      kenoViewMore.addEventListener('click', () => {
-        openKenoModal();
-      });
-    }
-  }
 
   // Wire "View Ticket" and "Cash Out" on the Keno (Draws Open) card
   const kenoOpenCard = document.querySelector('.ticketCard[data-game="keno-open"]');
