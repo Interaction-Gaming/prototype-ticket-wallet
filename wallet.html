@@ -122,6 +122,155 @@
       color:rgba(255,255,255,.65);
     }
 
+    /* Filter/Sort Control */
+    .filterControl{
+      background:rgba(255,255,255,.08);
+      border:1px solid rgba(255,255,255,.12);
+      border-radius:16px;
+      margin:0 14px 12px;
+      overflow:hidden;
+    }
+    .filterHeader{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      padding:12px 14px;
+      cursor:pointer;
+      transition:background .15s ease;
+    }
+    .filterHeader:hover{
+      background:rgba(255,255,255,.04);
+    }
+    .filterHeaderLeft{
+      display:flex;
+      align-items:center;
+      gap:8px;
+    }
+    .filterIcon{
+      width:20px;
+      height:20px;
+      fill:rgba(255,255,255,.7);
+    }
+    .filterTitle{
+      font-size:13px;
+      font-weight:700;
+      color:rgba(255,255,255,.85);
+    }
+    .filterBadge{
+      background:var(--lime);
+      color:#0b2a2a;
+      font-size:11px;
+      font-weight:800;
+      padding:2px 8px;
+      border-radius:999px;
+      margin-left:8px;
+    }
+    .filterChevron{
+      width:16px;
+      height:16px;
+      fill:rgba(255,255,255,.5);
+      transition:transform .2s ease;
+    }
+    .filterControl.expanded .filterChevron{
+      transform:rotate(180deg);
+    }
+    .filterBody{
+      max-height:0;
+      overflow:hidden;
+      transition:max-height .3s ease;
+    }
+    .filterControl.expanded .filterBody{
+      max-height:400px;
+    }
+    .filterBodyInner{
+      padding:0 14px 14px;
+      display:flex;
+      flex-direction:column;
+      gap:14px;
+    }
+    .filterGroup{
+      display:flex;
+      flex-direction:column;
+      gap:6px;
+    }
+    .filterGroupLabel{
+      font-size:11px;
+      font-weight:700;
+      color:rgba(255,255,255,.5);
+      text-transform:uppercase;
+      letter-spacing:.5px;
+    }
+    .filterOptions{
+      display:flex;
+      flex-wrap:wrap;
+      gap:6px;
+    }
+    .filterOption{
+      padding:6px 12px;
+      border-radius:999px;
+      font-size:12px;
+      font-weight:700;
+      background:rgba(255,255,255,.08);
+      color:rgba(255,255,255,.7);
+      border:1px solid rgba(255,255,255,.12);
+      cursor:pointer;
+      transition:all .15s ease;
+    }
+    .filterOption:hover{
+      background:rgba(255,255,255,.12);
+      color:rgba(255,255,255,.9);
+    }
+    .filterOption.active{
+      background:var(--lime);
+      color:#0b2a2a;
+      border-color:var(--lime);
+    }
+    .filterToggle{
+      display:flex;
+      align-items:center;
+      gap:10px;
+    }
+    .toggleSwitch{
+      width:44px;
+      height:24px;
+      background:rgba(255,255,255,.15);
+      border-radius:12px;
+      position:relative;
+      cursor:pointer;
+      transition:background .2s ease;
+    }
+    .toggleSwitch.active{
+      background:var(--lime);
+    }
+    .toggleSwitch::after{
+      content:'';
+      position:absolute;
+      width:20px;
+      height:20px;
+      background:#fff;
+      border-radius:50%;
+      top:2px;
+      left:2px;
+      transition:transform .2s ease;
+      box-shadow:0 2px 4px rgba(0,0,0,.2);
+    }
+    .toggleSwitch.active::after{
+      transform:translateX(20px);
+    }
+    .toggleLabel{
+      font-size:13px;
+      font-weight:600;
+      color:rgba(255,255,255,.8);
+    }
+    .filterDivider{
+      height:1px;
+      background:rgba(255,255,255,.1);
+      margin:4px 0;
+    }
+    .ticketCard.filtered-out{
+      display:none;
+    }
+
     /* ----- Ticket Card ----- */
     .ticketCard{
       background:var(--paper);
@@ -449,11 +598,64 @@
       </div>
     </header>
 
+    <!-- Filter/Sort Control -->
+    <div class="filterControl" id="filterControl">
+      <div class="filterHeader" onclick="toggleFilter()">
+        <div class="filterHeaderLeft">
+          <svg class="filterIcon" viewBox="0 0 24 24"><path d="M10 18h4v-2h-4v2zM3 6v2h18V6H3zm3 7h12v-2H6v2z"/></svg>
+          <span class="filterTitle">Filter & Sort</span>
+          <span class="filterBadge" id="filterBadge" style="display:none">0</span>
+        </div>
+        <svg class="filterChevron" viewBox="0 0 24 24"><path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6 1.41-1.41z"/></svg>
+      </div>
+      <div class="filterBody">
+        <div class="filterBodyInner">
+          <div class="filterGroup">
+            <div class="filterGroupLabel">Game</div>
+            <div class="filterOptions" id="gameFilters">
+              <div class="filterOption active" data-game="all">All Games</div>
+              <div class="filterOption" data-game="2by2">2 by 2</div>
+              <div class="filterOption" data-game="cowboy">Cowboy Draw</div>
+              <div class="filterOption" data-game="powerball">Powerball</div>
+              <div class="filterOption" data-game="keno">Keno</div>
+              <div class="filterOption" data-game="megamillions">Mega Millions</div>
+            </div>
+          </div>
+          <div class="filterDivider"></div>
+          <div class="filterGroup">
+            <div class="filterGroupLabel">Status</div>
+            <div class="filterOptions" id="statusFilters">
+              <div class="filterOption active" data-status="all">All</div>
+              <div class="filterOption" data-status="open">Draws Open</div>
+              <div class="filterOption" data-status="complete">Complete</div>
+              <div class="filterOption" data-status="paid">Paid</div>
+              <div class="filterOption" data-status="expired">Expired</div>
+            </div>
+          </div>
+          <div class="filterDivider"></div>
+          <div class="filterGroup">
+            <div class="filterToggle">
+              <div class="toggleSwitch" id="winnersToggle" onclick="toggleWinners(event)"></div>
+              <span class="toggleLabel">Winners Only</span>
+            </div>
+          </div>
+          <div class="filterDivider"></div>
+          <div class="filterGroup">
+            <div class="filterGroupLabel">Sort By</div>
+            <div class="filterOptions" id="sortOptions">
+              <div class="filterOption active" data-sort="newest">Newest First</div>
+              <div class="filterOption" data-sort="oldest">Oldest First</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <main>
       <div class="container">
         <div class="sectionLabel">
           <h2>Saved Tickets</h2>
-          <div class="hint">Scroll to view more</div>
+          <div class="hint" id="ticketCount">6 tickets</div>
         </div>
 
         <!-- Reusable action button markup -->
@@ -504,7 +706,7 @@
         </script>
 
         <!-- 2 by 2 (Draws Open) -->
-        <article class="ticketCard">
+        <article class="ticketCard" data-game-filter="2by2" data-status-filter="open" data-date="2025-10-15" data-winnings="0">
           <div class="cardTop">
             <div class="logoWrap"><img src="2-by-2-logo.png" alt="2 by 2 logo"></div>
             <div class="cardTopRight">
@@ -528,7 +730,7 @@
         </article>
 
         <!-- Cowboy Draw (Complete) -->
-        <article class="ticketCard" data-game="cowboy">
+        <article class="ticketCard" data-game="cowboy" data-game-filter="cowboy" data-status-filter="complete" data-date="2026-01-20" data-winnings="12">
           <div class="cardTop">
             <div class="logoWrap"><img src="cowboy-draw-logo.png" alt="Cowboy Draw logo"></div>
             <div class="cardTopRight">
@@ -552,7 +754,7 @@
         </article>
 
         <!-- Powerball (Paid) — Cash Out disabled -->
-        <article class="ticketCard" data-game="powerball">
+        <article class="ticketCard" data-game="powerball" data-game-filter="powerball" data-status-filter="paid" data-date="2025-09-08" data-winnings="250">
           <div class="cardTop">
             <div class="logoWrap"><img src="powerball-logo.png" alt="Powerball logo"></div>
             <div class="cardTopRight">
@@ -576,7 +778,7 @@
         </article>
 
         <!-- Keno (Draws Open) -->
-        <article class="ticketCard" data-game="keno-open">
+        <article class="ticketCard" data-game="keno-open" data-game-filter="keno" data-status-filter="open" data-date="2026-02-05" data-winnings="32">
           <div class="cardTop">
             <div class="logoWrap"><img src="keno-logo.png" alt="Keno logo"></div>
             <div class="cardTopRight">
@@ -600,7 +802,7 @@
         </article>
 
         <!-- Mega Millions (Open) -->
-        <article class="ticketCard">
+        <article class="ticketCard" data-game-filter="megamillions" data-status-filter="open" data-date="2025-11-22" data-winnings="0">
           <div class="cardTop">
             <div class="logoWrap"><img src="mega-millions-logo.png" alt="Mega Millions logo"></div>
             <div class="cardTopRight">
@@ -624,7 +826,7 @@
         </article>
 
         <!-- Keno (Expired) — Cash Out disabled -->
-        <article class="ticketCard" data-game="keno">
+        <article class="ticketCard" data-game="keno" data-game-filter="keno" data-status-filter="expired" data-date="2024-03-15" data-winnings="0">
           <div class="cardTop">
             <div class="logoWrap"><img src="keno-logo.png" alt="Keno logo"></div>
             <div class="cardTopRight">
@@ -805,6 +1007,134 @@
       });
     }
   }
+</script>
+
+<script>
+  // Filter & Sort Functionality
+  let currentFilters = {
+    game: 'all',
+    status: 'all',
+    winnersOnly: false,
+    sort: 'newest'
+  };
+
+  function toggleFilter() {
+    document.getElementById('filterControl').classList.toggle('expanded');
+  }
+
+  function toggleWinners(e) {
+    e.stopPropagation();
+    const toggle = document.getElementById('winnersToggle');
+    toggle.classList.toggle('active');
+    currentFilters.winnersOnly = toggle.classList.contains('active');
+    applyFilters();
+  }
+
+  // Game filter click handlers
+  document.querySelectorAll('#gameFilters .filterOption').forEach(opt => {
+    opt.addEventListener('click', () => {
+      document.querySelectorAll('#gameFilters .filterOption').forEach(o => o.classList.remove('active'));
+      opt.classList.add('active');
+      currentFilters.game = opt.dataset.game;
+      applyFilters();
+    });
+  });
+
+  // Status filter click handlers
+  document.querySelectorAll('#statusFilters .filterOption').forEach(opt => {
+    opt.addEventListener('click', () => {
+      document.querySelectorAll('#statusFilters .filterOption').forEach(o => o.classList.remove('active'));
+      opt.classList.add('active');
+      currentFilters.status = opt.dataset.status;
+      applyFilters();
+    });
+  });
+
+  // Sort option click handlers
+  document.querySelectorAll('#sortOptions .filterOption').forEach(opt => {
+    opt.addEventListener('click', () => {
+      document.querySelectorAll('#sortOptions .filterOption').forEach(o => o.classList.remove('active'));
+      opt.classList.add('active');
+      currentFilters.sort = opt.dataset.sort;
+      applyFilters();
+    });
+  });
+
+  function applyFilters() {
+    const container = document.querySelector('.container');
+    const cards = Array.from(document.querySelectorAll('.ticketCard'));
+    let visibleCount = 0;
+    let activeFilterCount = 0;
+
+    // Count active filters
+    if (currentFilters.game !== 'all') activeFilterCount++;
+    if (currentFilters.status !== 'all') activeFilterCount++;
+    if (currentFilters.winnersOnly) activeFilterCount++;
+
+    // Filter cards
+    cards.forEach(card => {
+      let show = true;
+
+      // Game filter
+      if (currentFilters.game !== 'all' && card.dataset.gameFilter !== currentFilters.game) {
+        show = false;
+      }
+
+      // Status filter
+      if (currentFilters.status !== 'all' && card.dataset.statusFilter !== currentFilters.status) {
+        show = false;
+      }
+
+      // Winners only filter
+      if (currentFilters.winnersOnly && parseInt(card.dataset.winnings) === 0) {
+        show = false;
+      }
+
+      if (show) {
+        card.classList.remove('filtered-out');
+        visibleCount++;
+      } else {
+        card.classList.add('filtered-out');
+      }
+    });
+
+    // Sort visible cards
+    const visibleCards = cards.filter(c => !c.classList.contains('filtered-out'));
+    visibleCards.sort((a, b) => {
+      const dateA = new Date(a.dataset.date);
+      const dateB = new Date(b.dataset.date);
+      return currentFilters.sort === 'newest' ? dateB - dateA : dateA - dateB;
+    });
+
+    // Reorder DOM
+    const sectionLabel = container.querySelector('.sectionLabel');
+    const template = container.querySelector('template');
+    const templateScript = container.querySelector('template + script');
+
+    // Remove all cards
+    cards.forEach(card => card.remove());
+
+    // Re-add sorted visible cards, then hidden cards
+    visibleCards.forEach(card => container.appendChild(card));
+    cards.filter(c => c.classList.contains('filtered-out')).forEach(card => container.appendChild(card));
+
+    // Update ticket count
+    document.getElementById('ticketCount').textContent = visibleCount + ' ticket' + (visibleCount !== 1 ? 's' : '');
+
+    // Update filter badge
+    const badge = document.getElementById('filterBadge');
+    if (activeFilterCount > 0) {
+      badge.textContent = activeFilterCount;
+      badge.style.display = 'inline';
+    } else {
+      badge.style.display = 'none';
+    }
+  }
+
+  // Initial sort on page load
+  document.addEventListener('DOMContentLoaded', () => {
+    applyFilters();
+  });
 </script>
 
 </body>
