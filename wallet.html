@@ -624,7 +624,7 @@
     document.getElementById('a3').appendChild(renderActions(true));  // Powerball Paid - Cash Out disabled
     document.getElementById('a4').appendChild(renderActions(true));  // Mega Millions - Cash Out disabled
     document.getElementById('a5').appendChild(renderActions(true, true));  // Keno Expired - all disabled
-    document.getElementById('a6').appendChild(renderActions(true)); // Keno Open - Cash Out disabled
+    document.getElementById('a6').appendChild(renderActions(false)); // Keno Open - Cash Out enabled (shows modal)
 
     // Click hooks (disabled buttons ignored)
     document.querySelectorAll('.miniAction').forEach(btn => {
@@ -684,6 +684,18 @@
   </div>
 </div>
 
+<!-- Open Draws Cash Out Modal -->
+<div class="modal-overlay" id="openDrawsModal">
+  <div class="modal-box" style="position:relative">
+    <button class="modal-close" onclick="closeOpenDrawsModal()" aria-label="Close">&times;</button>
+    <h3>Drawings Still Open</h3>
+    <p>There are open draws on this ticket, come back when all drawings are closed for mobile cashing options.</p>
+    <div class="modal-buttons">
+      <button class="modal-btn primary" onclick="closeOpenDrawsModal()">Dismiss</button>
+    </div>
+  </div>
+</div>
+
 <script>
   function openKenoModal() {
     document.getElementById('kenoModal').classList.add('visible');
@@ -710,16 +722,36 @@
     if (e.target === this) closeKenoModal();
   });
 
-  // Wire "View Ticket" on the Keno (Draws Open) card
+  // Open Draws modal functions
+  function openOpenDrawsModal() {
+    document.getElementById('openDrawsModal').classList.add('visible');
+  }
+  function closeOpenDrawsModal() {
+    document.getElementById('openDrawsModal').classList.remove('visible');
+  }
+  // Close modal when clicking outside
+  document.getElementById('openDrawsModal').addEventListener('click', function(e) {
+    if (e.target === this) closeOpenDrawsModal();
+  });
+
+  // Wire "View Ticket" and "Cash Out" on the Keno (Draws Open) card
   const kenoOpenCard = document.querySelector('.ticketCard[data-game="keno-open"]');
 
   if (kenoOpenCard) {
     const kenoOpenViewMore = kenoOpenCard.querySelector('[data-action="more"]:not(.disabled)');
+    const kenoOpenCashOut = kenoOpenCard.querySelector('[data-action="cash"]:not(.disabled)');
 
     if (kenoOpenViewMore) {
       kenoOpenViewMore.classList.add('has-destination');
       kenoOpenViewMore.addEventListener('click', () => {
         openKenoModal();
+      });
+    }
+
+    if (kenoOpenCashOut) {
+      kenoOpenCashOut.classList.add('has-destination');
+      kenoOpenCashOut.addEventListener('click', () => {
+        openOpenDrawsModal();
       });
     }
   }
