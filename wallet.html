@@ -140,6 +140,22 @@
       margin-bottom:10px;
     }
 
+    .cardTopRight{
+      display:flex;
+      flex-direction:column;
+      align-items:flex-end;
+      gap:6px;
+    }
+
+    .purchaseDate{
+      font-size:11px;
+      font-weight:700;
+      color:rgba(0,0,0,.55);
+    }
+    .purchaseDate span{
+      color:rgba(0,0,0,.82);
+    }
+
     .logoWrap{
       width:116px;
       height:52px;
@@ -491,7 +507,10 @@
         <article class="ticketCard">
           <div class="cardTop">
             <div class="logoWrap"><img src="2-by-2-logo.png" alt="2 by 2 logo"></div>
-            <span class="badge open">Draws Open</span>
+            <div class="cardTopRight">
+              <div class="purchaseDate">Purchased: <span>Oct 15, 2025</span></div>
+              <span class="badge open">Draws Open</span>
+            </div>
           </div>
 
           <div class="actionGrid" id="a1"></div>
@@ -512,7 +531,10 @@
         <article class="ticketCard" data-game="cowboy">
           <div class="cardTop">
             <div class="logoWrap"><img src="cowboy-draw-logo.png" alt="Cowboy Draw logo"></div>
-            <span class="badge complete">Draws Complete</span>
+            <div class="cardTopRight">
+              <div class="purchaseDate">Purchased: <span>Jan 20, 2026</span></div>
+              <span class="badge complete">Draws Complete</span>
+            </div>
           </div>
 
           <div class="actionGrid" id="a2"></div>
@@ -533,7 +555,10 @@
         <article class="ticketCard" data-game="powerball">
           <div class="cardTop">
             <div class="logoWrap"><img src="powerball-logo.png" alt="Powerball logo"></div>
-            <span class="badge paid">Paid</span>
+            <div class="cardTopRight">
+              <div class="purchaseDate">Purchased: <span>Sep 8, 2025</span></div>
+              <span class="badge paid">Paid</span>
+            </div>
           </div>
 
           <div class="actionGrid" id="a3"></div>
@@ -554,7 +579,10 @@
         <article class="ticketCard" data-game="keno-open">
           <div class="cardTop">
             <div class="logoWrap"><img src="keno-logo.png" alt="Keno logo"></div>
-            <span class="badge open">Draws Open</span>
+            <div class="cardTopRight">
+              <div class="purchaseDate">Purchased: <span>Feb 5, 2026</span></div>
+              <span class="badge open">Draws Open</span>
+            </div>
           </div>
 
           <div class="actionGrid" id="a6"></div>
@@ -575,7 +603,10 @@
         <article class="ticketCard">
           <div class="cardTop">
             <div class="logoWrap"><img src="mega-millions-logo.png" alt="Mega Millions logo"></div>
-            <span class="badge open">Draws Open</span>
+            <div class="cardTopRight">
+              <div class="purchaseDate">Purchased: <span>Nov 22, 2025</span></div>
+              <span class="badge open">Draws Open</span>
+            </div>
           </div>
 
           <div class="actionGrid" id="a4"></div>
@@ -596,7 +627,10 @@
         <article class="ticketCard" data-game="keno">
           <div class="cardTop">
             <div class="logoWrap"><img src="keno-logo.png" alt="Keno logo"></div>
-            <span class="badge expired">Expired</span>
+            <div class="cardTopRight">
+              <div class="purchaseDate">Purchased: <span>Mar 15, 2024</span></div>
+              <span class="badge expired">Expired</span>
+            </div>
           </div>
 
           <div class="actionGrid" id="a5"></div>
