@@ -317,11 +317,22 @@
     }
 
     /* Clickable Hotspot Effects - only for links to .html pages */
-    a[href$=".html"] {
+    a[href$=".html"]:not(.back) {
       position: relative;
       transition: box-shadow 0.2s ease, transform 0.2s ease;
     }
     a[href$=".html"]:hover {
+      box-shadow: 0 0 0 4px rgba(0, 122, 255, 0.35), 0 0 20px rgba(0, 122, 255, 0.25);
+    }
+    /* Keep back button absolute positioned */
+    .back {
+      position: absolute !important;
+    }
+    /* Hotspot effects for buttons with navigation */
+    .miniAction.has-destination {
+      transition: box-shadow 0.2s ease, transform 0.08s ease, background 0.12s ease;
+    }
+    .miniAction.has-destination:hover {
       box-shadow: 0 0 0 4px rgba(0, 122, 255, 0.35), 0 0 20px rgba(0, 122, 255, 0.25);
     }
     @keyframes hotspotPulse {
@@ -380,7 +391,7 @@
   </script>
   <script>
     (function(){
-      const clickables = () => document.querySelectorAll('a[href$=".html"]:not(.pw-overlay *):not(.modal-overlay *)');
+      const clickables = () => document.querySelectorAll('a[href$=".html"]:not(.pw-overlay *):not(.modal-overlay *), .miniAction.has-destination');
       function triggerEntryPulse(el) {
         el.classList.add('hotspot-pulse');
         setTimeout(() => {
@@ -615,12 +626,14 @@
     const cowboyCashOut = cowboyCard.querySelector('[data-action="cash"]:not(.disabled)');
 
     if (cowboyMore) {
+      cowboyMore.classList.add('has-destination');
       cowboyMore.addEventListener('click', () => {
         window.location.href = 'ticket-details.html';
       });
     }
 
     if (cowboyCashOut) {
+      cowboyCashOut.classList.add('has-destination');
       cowboyCashOut.addEventListener('click', () => {
         window.location.href = 'claim-summary.html';
       });
@@ -674,6 +687,7 @@
     const kenoViewMore = kenoCard.querySelector('[data-action="more"]:not(.disabled)');
 
     if (kenoViewMore) {
+      kenoViewMore.classList.add('has-destination');
       kenoViewMore.addEventListener('click', () => {
         openKenoModal();
       });
@@ -689,6 +703,7 @@
     const powerballBuyAgain = powerballCard.querySelector('[data-action="buy"]:not(.disabled)');
 
     if (powerballBuyAgain) {
+      powerballBuyAgain.classList.add('has-destination');
       powerballBuyAgain.addEventListener('click', () => {
         window.location.href = 'mobile-playslip.html';
       });

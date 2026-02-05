@@ -36,25 +36,36 @@
       -webkit-user-drag:none;
     }
 
-    /* Clickable X hotspot (aligned to the image’s X position) */
+    /* Clickable X hotspot (aligned to the image's X position) */
     .close-btn{
-      position:absolute;
+      position:absolute !important;
       top:70px;
       left:12px;
       width:44px;
       height:44px;
       cursor:pointer;
       border-radius:50%;
-      background:transparent;
+      background:rgba(0,0,0,.5);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      backdrop-filter:blur(4px);
+      z-index:10;
+    }
+    .close-btn::before{
+      content:'✕';
+      color:#fff;
+      font-size:18px;
+      font-weight:bold;
     }
 
     /* Optional: subtle tap feedback for prototyping */
     .close-btn:active{
-      background:rgba(0,0,0,.15);
+      background:rgba(0,0,0,.7);
     }
 
     /* Clickable Hotspot Effects - only for links to .html pages */
-    a[href$=".html"] {
+    a[href$=".html"]:not(.close-btn) {
       position: relative;
       transition: box-shadow 0.2s ease, transform 0.2s ease;
     }
