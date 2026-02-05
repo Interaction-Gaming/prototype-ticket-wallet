@@ -1,0 +1,552 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Keno List Results</title>
+
+  <style>
+    :root{
+      --phone-w:402px;
+      --phone-h:874px;
+      --bg:#f8f8f8;
+      --card-bg:#fff;
+      --text-primary:rgba(0,0,0,.87);
+      --text-secondary:rgba(0,0,0,.55);
+      --text-tertiary:rgba(0,0,0,.38);
+      --border:rgba(0,0,0,.08);
+      --teal:#0f5c57;
+      --yellow:#f5c518;
+      --yellow-light:#fef9e7;
+    }
+
+    *{ box-sizing:border-box; }
+    body{
+      margin:0;
+      font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","SF Pro Text","Segoe UI",Roboto,Arial,sans-serif;
+      background:#111;
+      display:flex;
+      justify-content:center;
+      padding:20px;
+    }
+
+    .phone{
+      width:var(--phone-w);
+      height:var(--phone-h);
+      border-radius:28px;
+      overflow:hidden;
+      background:var(--bg);
+      box-shadow:0 20px 60px rgba(0,0,0,.55);
+      display:flex;
+      flex-direction:column;
+      position:relative;
+    }
+
+    /* Header */
+    header{
+      padding:16px 16px 12px;
+      padding-top:50px;
+      background:#fff;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      position:relative;
+      border-bottom:1px solid var(--border);
+    }
+
+    .close-btn{
+      position:absolute !important;
+      left:16px;
+      top:50px;
+      width:32px;
+      height:32px;
+      border-radius:50%;
+      background:transparent;
+      border:1px solid var(--border);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      cursor:pointer;
+      text-decoration:none;
+      color:var(--text-primary);
+      font-size:16px;
+      transition:background .15s ease;
+    }
+    .close-btn:hover{
+      background:rgba(0,0,0,.05);
+    }
+
+    .page-title{
+      font-size:17px;
+      font-weight:600;
+      color:var(--text-primary);
+    }
+
+    /* Summary Bar */
+    .summary-bar{
+      display:flex;
+      background:#fff;
+      border-bottom:1px solid var(--border);
+    }
+    .summary-item{
+      flex:1;
+      padding:16px 20px;
+      border-right:1px solid var(--border);
+    }
+    .summary-item:last-child{
+      border-right:none;
+    }
+    .summary-value{
+      font-size:24px;
+      font-weight:700;
+      color:var(--text-primary);
+      margin-bottom:4px;
+    }
+    .summary-label{
+      font-size:11px;
+      font-weight:600;
+      color:var(--text-tertiary);
+      text-transform:uppercase;
+      letter-spacing:.5px;
+    }
+
+    /* Main scrollable area */
+    main{
+      flex:1;
+      overflow-y:auto;
+      padding:16px;
+    }
+
+    /* Drawing Card */
+    .drawing-card{
+      background:#fff;
+      border-radius:16px;
+      margin-bottom:16px;
+      box-shadow:0 2px 8px rgba(0,0,0,.06);
+      overflow:hidden;
+    }
+
+    .drawing-header{
+      display:flex;
+      align-items:flex-start;
+      justify-content:space-between;
+      padding:14px 16px;
+      gap:12px;
+    }
+
+    .drawing-info{
+      display:flex;
+      gap:24px;
+    }
+
+    .info-block{}
+    .info-value{
+      font-size:15px;
+      font-weight:700;
+      color:var(--text-primary);
+    }
+    .info-label{
+      font-size:11px;
+      font-weight:600;
+      color:var(--text-tertiary);
+      text-transform:uppercase;
+      letter-spacing:.3px;
+      margin-top:2px;
+    }
+
+    .status-badge{
+      padding:6px 14px;
+      border-radius:999px;
+      font-size:13px;
+      font-weight:600;
+      background:#e8f5f4;
+      color:var(--teal);
+    }
+    .status-badge.pending{
+      background:#1a1a1a;
+      color:#fff;
+    }
+
+    .drawing-body{
+      padding:0 16px 16px;
+    }
+
+    .ticket-box{
+      background:var(--bg);
+      border:1px solid var(--border);
+      border-radius:12px;
+      padding:14px;
+      position:relative;
+    }
+
+    .win-badge{
+      position:absolute;
+      top:-10px;
+      left:12px;
+      display:flex;
+      align-items:center;
+      gap:4px;
+      background:var(--yellow);
+      color:#000;
+      padding:4px 10px;
+      border-radius:999px;
+      font-size:13px;
+      font-weight:700;
+    }
+    .win-badge svg{
+      width:14px;
+      height:14px;
+    }
+
+    .sun-icon{
+      position:absolute;
+      top:-8px;
+      left:12px;
+      width:28px;
+      height:28px;
+      background:var(--yellow-light);
+      border-radius:50%;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-size:14px;
+    }
+
+    .numbers-row{
+      display:flex;
+      flex-wrap:wrap;
+      gap:8px;
+      margin-bottom:12px;
+      margin-top:8px;
+    }
+
+    .number-ball{
+      width:32px;
+      height:32px;
+      border-radius:50%;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-size:13px;
+      font-weight:700;
+      border:2px solid var(--text-tertiary);
+      color:var(--text-secondary);
+      background:#fff;
+    }
+    .number-ball.match{
+      background:#1a1a1a;
+      border-color:#1a1a1a;
+      color:#fff;
+    }
+
+    .ticket-footer{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+    }
+
+    .game-name{
+      font-size:13px;
+      font-weight:600;
+      color:var(--text-secondary);
+      font-style:italic;
+    }
+
+    .cash-btn{
+      width:40px;
+      height:40px;
+      border-radius:50%;
+      background:#fff;
+      border:1px solid var(--border);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      cursor:pointer;
+    }
+    .cash-btn svg{
+      width:22px;
+      height:22px;
+      fill:var(--text-secondary);
+    }
+
+    /* Bottom Navigation */
+    .bottom-nav{
+      background:#fff;
+      border-top:1px solid var(--border);
+      padding:8px 16px 24px;
+    }
+
+    .nav-tabs{
+      display:flex;
+      background:var(--bg);
+      border-radius:10px;
+      padding:4px;
+      margin-bottom:16px;
+    }
+    .nav-tab{
+      flex:1;
+      padding:8px 12px;
+      text-align:center;
+      font-size:13px;
+      font-weight:600;
+      color:var(--text-secondary);
+      border-radius:8px;
+      cursor:pointer;
+      transition:background .15s ease, color .15s ease;
+    }
+    .nav-tab.active{
+      background:#1a1a1a;
+      color:#fff;
+    }
+
+    .nav-icons{
+      display:flex;
+      justify-content:space-around;
+      padding:8px 0;
+    }
+    .nav-icon{
+      width:48px;
+      height:48px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      cursor:pointer;
+    }
+    .nav-icon svg{
+      width:28px;
+      height:28px;
+      fill:var(--text-secondary);
+    }
+    .nav-icon img{
+      width:36px;
+      height:36px;
+      object-fit:contain;
+    }
+
+    /* Scrollbar */
+    main::-webkit-scrollbar{ width:6px; }
+    main::-webkit-scrollbar-thumb{
+      background:rgba(0,0,0,.15);
+      border-radius:999px;
+    }
+
+    /* Clickable Hotspot Effects */
+    a[href$=".html"]:not(.close-btn) {
+      position: relative;
+      transition: box-shadow 0.2s ease, transform 0.2s ease;
+    }
+    a[href$=".html"]:hover {
+      box-shadow: 0 0 0 4px rgba(0, 122, 255, 0.35), 0 0 20px rgba(0, 122, 255, 0.25);
+    }
+    @keyframes hotspotPulse {
+      0%, 100% { box-shadow: 0 0 0 0 rgba(0, 122, 255, 0); }
+      50% { box-shadow: 0 0 0 6px rgba(0, 122, 255, 0.4), 0 0 24px rgba(0, 122, 255, 0.3); }
+    }
+    .hotspot-pulse {
+      animation: hotspotPulse 1s ease-in-out;
+    }
+
+    /* Password Protection Overlay */
+    .pw-overlay{position:fixed;inset:0;background:rgba(0,0,0,.95);display:flex;align-items:center;justify-content:center;z-index:9999;flex-direction:column;gap:16px}
+    .pw-overlay.hidden{display:none}
+    .pw-box{background:#1a1a1a;padding:32px;border-radius:16px;text-align:center;max-width:300px}
+    .pw-box h2{color:#fff;margin:0 0 8px;font-size:20px}
+    .pw-box p{color:#888;margin:0 0 20px;font-size:14px}
+    .pw-box input{width:100%;padding:12px;border:1px solid #333;border-radius:8px;background:#222;color:#fff;font-size:16px;box-sizing:border-box;text-align:center}
+    .pw-box input:focus{outline:none;border-color:#0f5c57}
+    .pw-box button{width:100%;margin-top:12px;padding:12px;border:none;border-radius:8px;background:#0f5c57;color:#fff;font-size:16px;font-weight:600;cursor:pointer}
+    .pw-box button:hover{background:#0a4a45}
+    .pw-error{color:#ff6b6b;font-size:13px;margin-top:8px;display:none}
+  </style>
+</head>
+
+<body>
+  <div class="pw-overlay" id="pwOverlay">
+    <div class="pw-box">
+      <h2>Protected Prototype</h2>
+      <p>Enter password to continue</p>
+      <input type="password" id="pwInput" placeholder="Password" autocomplete="off">
+      <button onclick="checkPw()">Enter</button>
+      <div class="pw-error" id="pwError">Incorrect password</div>
+    </div>
+  </div>
+  <script>
+    (function(){var k='tw_auth';if(localStorage.getItem(k)==='1'){document.getElementById('pwOverlay').classList.add('hidden');}})();
+    function checkPw(){var p=document.getElementById('pwInput').value;if(p==='winning'){localStorage.setItem('tw_auth','1');document.getElementById('pwOverlay').classList.add('hidden');}else{document.getElementById('pwError').style.display='block';document.getElementById('pwInput').value='';}}
+    document.getElementById('pwInput').addEventListener('keypress',function(e){if(e.key==='Enter')checkPw();});
+  </script>
+  <script>
+    (function(){
+      const clickables = () => document.querySelectorAll('a[href$=".html"]:not(.pw-overlay *)');
+      function triggerEntryPulse(el) {
+        el.classList.add('hotspot-pulse');
+        setTimeout(() => {
+          el.classList.remove('hotspot-pulse');
+          setTimeout(() => {
+            el.classList.add('hotspot-pulse');
+            setTimeout(() => el.classList.remove('hotspot-pulse'), 1000);
+          }, 1000);
+        }, 1000);
+      }
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting && !entry.target.dataset.pulsed) {
+            entry.target.dataset.pulsed = '1';
+            triggerEntryPulse(entry.target);
+          }
+        });
+      }, { threshold: 0.5 });
+      let idleTimer;
+      function resetIdle() {
+        clearTimeout(idleTimer);
+        idleTimer = setTimeout(() => {
+          clickables().forEach(el => triggerEntryPulse(el));
+        }, 3000);
+      }
+      document.addEventListener('DOMContentLoaded', () => {
+        clickables().forEach(el => observer.observe(el));
+        ['mousemove','keydown','click','scroll','touchstart'].forEach(e => document.addEventListener(e, resetIdle));
+        resetIdle();
+      });
+    })();
+  </script>
+
+  <div class="phone">
+    <header>
+      <a href="wallet.html" class="close-btn" aria-label="Close">&#x2715;</a>
+      <div class="page-title">List Ticket</div>
+    </header>
+
+    <div class="summary-bar">
+      <div class="summary-item">
+        <div class="summary-value">$4,000</div>
+        <div class="summary-label">Total Winnings</div>
+      </div>
+      <div class="summary-item">
+        <div class="summary-value">3</div>
+        <div class="summary-label">Pending Games</div>
+      </div>
+    </div>
+
+    <main>
+      <!-- Drawing 1 - Pending -->
+      <div class="drawing-card">
+        <div class="drawing-header">
+          <div class="drawing-info">
+            <div class="info-block">
+              <div class="info-value">0123006</div>
+              <div class="info-label">Drawing</div>
+            </div>
+            <div class="info-block">
+              <div class="info-value">JUL 22</div>
+              <div class="info-label">Draw Date</div>
+            </div>
+          </div>
+          <div class="status-badge pending">Pending</div>
+        </div>
+        <div class="drawing-body">
+          <div class="ticket-box">
+            <div class="sun-icon">&#9728;</div>
+            <div class="numbers-row">
+              <div class="number-ball">2</div>
+              <div class="number-ball">3</div>
+              <div class="number-ball">5</div>
+              <div class="number-ball">6</div>
+              <div class="number-ball">33</div>
+              <div class="number-ball">37</div>
+              <div class="number-ball">56</div>
+              <div class="number-ball">68</div>
+              <div class="number-ball">79</div>
+              <div class="number-ball">80</div>
+            </div>
+            <div class="ticket-footer">
+              <div class="game-name">KENO 603 PLUS</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Drawing 2 - Winner -->
+      <div class="drawing-card">
+        <div class="drawing-header">
+          <div class="drawing-info">
+            <div class="info-block">
+              <div class="info-value">0123005</div>
+              <div class="info-label">Drawing</div>
+            </div>
+            <div class="info-block">
+              <div class="info-value">JUL 22</div>
+              <div class="info-label">Draw Date</div>
+            </div>
+          </div>
+        </div>
+        <div class="drawing-body">
+          <div class="ticket-box">
+            <div class="win-badge">
+              <svg viewBox="0 0 24 24"><path d="M12 2L9.19 8.63 2 9.24l5.46 4.73L5.82 21 12 17.27 18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2z" fill="currentColor"/></svg>
+              $32
+            </div>
+            <div class="numbers-row" style="margin-top:16px;">
+              <div class="number-ball match">2</div>
+              <div class="number-ball match">3</div>
+              <div class="number-ball match">5</div>
+              <div class="number-ball match">6</div>
+              <div class="number-ball">33</div>
+              <div class="number-ball match">37</div>
+              <div class="number-ball">56</div>
+              <div class="number-ball match">68</div>
+              <div class="number-ball">79</div>
+              <div class="number-ball match">80</div>
+            </div>
+            <div class="ticket-footer">
+              <div class="game-name">KENO 603 PLUS</div>
+              <button class="cash-btn" aria-label="Cash out">
+                <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 17h-2v-2h2v2zm0-4h-2V7h2v8z"/><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="2"/><text x="12" y="16" text-anchor="middle" font-size="10" font-weight="bold" fill="currentColor">$</text></svg>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Drawing 3 - Partial -->
+      <div class="drawing-card">
+        <div class="drawing-header">
+          <div class="drawing-info">
+            <div class="info-block">
+              <div class="info-value">0123004</div>
+              <div class="info-label">Drawing</div>
+            </div>
+            <div class="info-block">
+              <div class="info-value">JUL 21</div>
+              <div class="info-label">Draw Date</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <div class="bottom-nav">
+      <div class="nav-tabs">
+        <div class="nav-tab">New</div>
+        <div class="nav-tab">Edit</div>
+        <div class="nav-tab">Watch Ticket</div>
+        <div class="nav-tab active">Ticket List</div>
+      </div>
+      <div class="nav-icons">
+        <div class="nav-icon">
+          <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" fill="none" stroke="currentColor" stroke-width="2"/><text x="12" y="10" text-anchor="middle" font-size="6" fill="currentColor">LIVE</text><text x="12" y="17" text-anchor="middle" font-size="7" font-weight="bold" fill="currentColor">237</text></svg>
+        </div>
+        <div class="nav-icon">
+          <img src="keno-logo.png" alt="Keno">
+        </div>
+        <div class="nav-icon">
+          <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" fill="none" stroke="currentColor" stroke-width="2"/><polyline points="12,6 12,12 16,14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+        </div>
+        <div class="nav-icon">
+          <svg viewBox="0 0 24 24"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z" fill="currentColor"/></svg>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
