@@ -308,6 +308,22 @@
       fill:#8e8e93;
     }
 
+    /* Clickable Hotspot Effects */
+    a, button, [onclick] {
+      position: relative;
+      transition: box-shadow 0.2s ease, transform 0.2s ease;
+    }
+    a:hover, button:hover, [onclick]:hover {
+      box-shadow: 0 0 0 4px rgba(0, 122, 255, 0.35), 0 0 20px rgba(0, 122, 255, 0.25);
+    }
+    @keyframes hotspotPulse {
+      0%, 100% { box-shadow: 0 0 0 0 rgba(0, 122, 255, 0); }
+      50% { box-shadow: 0 0 0 6px rgba(0, 122, 255, 0.4), 0 0 24px rgba(0, 122, 255, 0.3); }
+    }
+    .hotspot-pulse {
+      animation: hotspotPulse 1s ease-in-out;
+    }
+
     /* Password Protection Overlay */
     .pw-overlay{position:fixed;inset:0;background:rgba(0,0,0,.95);display:flex;align-items:center;justify-content:center;z-index:9999;flex-direction:column;gap:16px}
     .pw-overlay.hidden{display:none}
@@ -336,6 +352,41 @@
     (function(){var k='tw_auth';if(localStorage.getItem(k)==='1'){document.getElementById('pwOverlay').classList.add('hidden');}})();
     function checkPw(){var p=document.getElementById('pwInput').value;if(p==='winning'){localStorage.setItem('tw_auth','1');document.getElementById('pwOverlay').classList.add('hidden');}else{document.getElementById('pwError').style.display='block';document.getElementById('pwInput').value='';}}
     document.getElementById('pwInput').addEventListener('keypress',function(e){if(e.key==='Enter')checkPw();});
+  </script>
+  <script>
+    (function(){
+      const clickables = () => document.querySelectorAll('a:not(.pw-overlay *), button:not(.pw-overlay *), [onclick]:not(.pw-overlay *)');
+      function triggerEntryPulse(el) {
+        el.classList.add('hotspot-pulse');
+        setTimeout(() => {
+          el.classList.remove('hotspot-pulse');
+          setTimeout(() => {
+            el.classList.add('hotspot-pulse');
+            setTimeout(() => el.classList.remove('hotspot-pulse'), 1000);
+          }, 1000);
+        }, 1000);
+      }
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting && !entry.target.dataset.pulsed) {
+            entry.target.dataset.pulsed = '1';
+            triggerEntryPulse(entry.target);
+          }
+        });
+      }, { threshold: 0.5 });
+      let idleTimer;
+      function resetIdle() {
+        clearTimeout(idleTimer);
+        idleTimer = setTimeout(() => {
+          clickables().forEach(el => triggerEntryPulse(el));
+        }, 3000);
+      }
+      document.addEventListener('DOMContentLoaded', () => {
+        clickables().forEach(el => observer.observe(el));
+        ['mousemove','keydown','click','scroll','touchstart'].forEach(e => document.addEventListener(e, resetIdle));
+        resetIdle();
+      });
+    })();
   </script>
   <div class="phone">
     <header>
