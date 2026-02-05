@@ -316,12 +316,12 @@
       background-clip: padding-box;
     }
 
-    /* Clickable Hotspot Effects */
-    a, button, [onclick], .action-btn, .miniAction {
+    /* Clickable Hotspot Effects - only for links to .html pages */
+    a[href$=".html"] {
       position: relative;
       transition: box-shadow 0.2s ease, transform 0.2s ease;
     }
-    a:hover, button:hover, [onclick]:hover, .action-btn:hover, .miniAction:hover {
+    a[href$=".html"]:hover {
       box-shadow: 0 0 0 4px rgba(0, 122, 255, 0.35), 0 0 20px rgba(0, 122, 255, 0.25);
     }
     @keyframes hotspotPulse {
@@ -363,7 +363,7 @@
   </script>
   <script>
     (function(){
-      const clickables = () => document.querySelectorAll('a:not(.pw-overlay *), button:not(.pw-overlay *), [onclick]:not(.pw-overlay *), .miniAction');
+      const clickables = () => document.querySelectorAll('a[href$=".html"]:not(.pw-overlay *)');
       function triggerEntryPulse(el) {
         el.classList.add('hotspot-pulse');
         setTimeout(() => {
