@@ -1,0 +1,393 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ticket Wallet Prototype</title>
+
+  <style>
+    :root{
+      --gambyt-red:#E8272C;
+      --gambyt-red-dark:#C41E22;
+      --gambyt-red-light:#FF4D52;
+      --bg-dark:#0a0a0a;
+      --bg-card:rgba(255,255,255,.06);
+      --border-subtle:rgba(255,255,255,.10);
+      --text-primary:rgba(255,255,255,.95);
+      --text-secondary:rgba(255,255,255,.65);
+      --phone-w:402px;
+      --phone-h:874px;
+    }
+
+    *{ box-sizing:border-box; }
+    body{
+      margin:0;
+      font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;
+      background:#111;
+      display:flex;
+      justify-content:center;
+      padding:20px;
+    }
+
+    .phone{
+      width:var(--phone-w);
+      height:var(--phone-h);
+      border-radius:28px;
+      overflow:hidden;
+      background:var(--bg-dark);
+      box-shadow:0 20px 60px rgba(0,0,0,.55);
+      display:flex;
+      flex-direction:column;
+      color:#fff;
+    }
+
+    .content{
+      flex:1;
+      overflow:auto;
+      padding:40px 24px 24px;
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+    }
+
+    .logo{
+      width:180px;
+      height:auto;
+      margin-bottom:24px;
+    }
+
+    .pageTitle{
+      font-size:24px;
+      font-weight:900;
+      color:var(--text-primary);
+      text-align:center;
+      margin:0 0 16px;
+      letter-spacing:-.3px;
+    }
+
+    .pageDescription{
+      font-size:14px;
+      line-height:1.55;
+      color:var(--text-secondary);
+      text-align:center;
+      margin:0 0 32px;
+      max-width:340px;
+    }
+
+    .container{
+      width:100%;
+      background:var(--bg-card);
+      border:1px solid var(--border-subtle);
+      border-radius:22px;
+      padding:16px;
+      backdrop-filter:blur(6px);
+    }
+
+    .containerLabel{
+      font-size:12px;
+      font-weight:800;
+      color:var(--text-secondary);
+      text-transform:uppercase;
+      letter-spacing:.5px;
+      margin-bottom:14px;
+      padding-left:4px;
+    }
+
+    .actionGrid{
+      display:grid;
+      grid-template-columns:repeat(2, 1fr);
+      gap:12px;
+    }
+
+    .actionBtn{
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      justify-content:center;
+      gap:10px;
+      padding:20px 12px;
+      background:rgba(255,255,255,.04);
+      border:1px solid var(--border-subtle);
+      border-radius:16px;
+      cursor:pointer;
+      text-decoration:none;
+      transition:background .15s ease, transform .1s ease, box-shadow .2s ease;
+    }
+    .actionBtn:hover{
+      background:rgba(255,255,255,.08);
+    }
+    .actionBtn:active{
+      transform:scale(.98);
+    }
+
+    .actionIcon{
+      width:48px;
+      height:48px;
+      border-radius:14px;
+      background:var(--gambyt-red);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      box-shadow:0 8px 20px rgba(232,39,44,.35);
+    }
+    .actionIcon svg{
+      width:26px;
+      height:26px;
+      fill:#fff;
+    }
+
+    .actionLabel{
+      font-size:13px;
+      font-weight:700;
+      color:var(--text-primary);
+      text-align:center;
+    }
+
+    /* Hotspot effects for links */
+    a.actionBtn{
+      position:relative;
+    }
+    a.actionBtn:hover{
+      box-shadow:0 0 0 4px rgba(232,39,44,.35), 0 0 20px rgba(232,39,44,.25);
+    }
+    @keyframes hotspotPulse {
+      0%, 100% { box-shadow: 0 0 0 0 rgba(232,39,44,0); }
+      50% { box-shadow: 0 0 0 6px rgba(232,39,44,.4), 0 0 24px rgba(232,39,44,.3); }
+    }
+    .hotspot-pulse {
+      animation: hotspotPulse 1s ease-in-out;
+    }
+
+    /* Settings button (non-link) */
+    button.actionBtn{
+      border:1px solid var(--border-subtle);
+      font-family:inherit;
+    }
+    button.actionBtn:hover{
+      box-shadow:0 0 0 4px rgba(232,39,44,.35), 0 0 20px rgba(232,39,44,.25);
+    }
+
+    /* Modal Overlay */
+    .modal-overlay{
+      position:fixed;
+      inset:0;
+      background:rgba(0,0,0,.8);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      z-index:9998;
+      opacity:0;
+      visibility:hidden;
+      transition:opacity .2s ease, visibility .2s ease;
+    }
+    .modal-overlay.visible{
+      opacity:1;
+      visibility:visible;
+    }
+    .modal-box{
+      background:#1a1a1a;
+      padding:28px 24px;
+      border-radius:20px;
+      text-align:center;
+      max-width:340px;
+      width:90%;
+      transform:scale(.95);
+      transition:transform .2s ease;
+      position:relative;
+    }
+    .modal-overlay.visible .modal-box{
+      transform:scale(1);
+    }
+    .modal-box h3{
+      color:#fff;
+      margin:0 0 8px;
+      font-size:18px;
+      font-weight:700;
+    }
+    .modal-box p{
+      color:#888;
+      margin:0 0 20px;
+      font-size:14px;
+      line-height:1.5;
+    }
+    .modal-close{
+      position:absolute;
+      top:12px;
+      right:12px;
+      width:32px;
+      height:32px;
+      border:none;
+      border-radius:50%;
+      background:rgba(255,255,255,.1);
+      color:#fff;
+      font-size:18px;
+      cursor:pointer;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+    }
+    .modal-close:hover{
+      background:rgba(255,255,255,.2);
+    }
+    .modal-content{
+      min-height:80px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      color:rgba(255,255,255,.4);
+      font-size:13px;
+    }
+
+    /* Password Protection Overlay */
+    .pw-overlay{position:fixed;inset:0;background:rgba(0,0,0,.95);display:flex;align-items:center;justify-content:center;z-index:9999;flex-direction:column;gap:16px}
+    .pw-overlay.hidden{display:none}
+    .pw-box{background:#1a1a1a;padding:32px;border-radius:16px;text-align:center;max-width:300px}
+    .pw-box h2{color:#fff;margin:0 0 8px;font-size:20px}
+    .pw-box p{color:#888;margin:0 0 20px;font-size:14px}
+    .pw-box input{width:100%;padding:12px;border:1px solid #333;border-radius:8px;background:#222;color:#fff;font-size:16px;box-sizing:border-box;text-align:center}
+    .pw-box input:focus{outline:none;border-color:var(--gambyt-red)}
+    .pw-box button{width:100%;margin-top:12px;padding:12px;border:none;border-radius:8px;background:var(--gambyt-red);color:#fff;font-size:16px;font-weight:600;cursor:pointer}
+    .pw-box button:hover{background:var(--gambyt-red-dark)}
+    .pw-error{color:#ff6b6b;font-size:13px;margin-top:8px;display:none}
+
+    /* Scrollbar */
+    .content::-webkit-scrollbar{ width:8px; }
+    .content::-webkit-scrollbar-thumb{
+      background:rgba(255,255,255,.15);
+      border-radius:999px;
+    }
+  </style>
+</head>
+
+<body>
+  <!-- Password Protection -->
+  <div class="pw-overlay" id="pwOverlay">
+    <div class="pw-box">
+      <h2>Protected Prototype</h2>
+      <p>Enter password to continue</p>
+      <input type="password" id="pwInput" placeholder="Password" autocomplete="off">
+      <button onclick="checkPw()">Enter</button>
+      <div class="pw-error" id="pwError">Incorrect password</div>
+    </div>
+  </div>
+  <script>
+    (function(){var k='tw_auth';if(localStorage.getItem(k)==='1'){document.getElementById('pwOverlay').classList.add('hidden');}})();
+    function checkPw(){var p=document.getElementById('pwInput').value;if(p==='winning'){localStorage.setItem('tw_auth','1');document.getElementById('pwOverlay').classList.add('hidden');}else{document.getElementById('pwError').style.display='block';document.getElementById('pwInput').value='';}}
+    document.getElementById('pwInput').addEventListener('keypress',function(e){if(e.key==='Enter')checkPw();});
+  </script>
+
+  <!-- Hotspot Pulse Script -->
+  <script>
+    (function(){
+      const clickables = () => document.querySelectorAll('a.actionBtn:not(.pw-overlay *), button.actionBtn:not(.pw-overlay *)');
+      function triggerEntryPulse(el) {
+        el.classList.add('hotspot-pulse');
+        setTimeout(() => {
+          el.classList.remove('hotspot-pulse');
+          setTimeout(() => {
+            el.classList.add('hotspot-pulse');
+            setTimeout(() => el.classList.remove('hotspot-pulse'), 1000);
+          }, 1000);
+        }, 1000);
+      }
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting && !entry.target.dataset.pulsed) {
+            entry.target.dataset.pulsed = '1';
+            triggerEntryPulse(entry.target);
+          }
+        });
+      }, { threshold: 0.5 });
+      let idleTimer;
+      function resetIdle() {
+        clearTimeout(idleTimer);
+        idleTimer = setTimeout(() => {
+          clickables().forEach(el => triggerEntryPulse(el));
+        }, 3000);
+      }
+      document.addEventListener('DOMContentLoaded', () => {
+        clickables().forEach(el => observer.observe(el));
+        ['mousemove','keydown','click','scroll','touchstart'].forEach(e => document.addEventListener(e, resetIdle));
+        resetIdle();
+      });
+    })();
+  </script>
+
+  <div class="phone">
+    <div class="content">
+      <!-- Logo -->
+      <img src="gambyt-logo.png" alt="Gambyt" class="logo">
+
+      <!-- Title -->
+      <h1 class="pageTitle">Ticket Wallet Prototype</h1>
+
+      <!-- Description -->
+      <p class="pageDescription">
+        This is a prototype for Gambyt's Ticket Wallet solution that can access, save, and visualize draw game tickets that a player has purchased.
+      </p>
+
+      <!-- Action Buttons Container -->
+      <div class="container">
+        <div class="containerLabel">Entry Points & Settings</div>
+        <div class="actionGrid">
+          <!-- Ticket Wallet -->
+          <a href="wallet.html" class="actionBtn">
+            <div class="actionIcon">
+              <svg viewBox="0 0 24 24"><path d="M21 18v1c0 1.1-.9 2-2 2H5c-1.11 0-2-.9-2-2V5c0-1.1.89-2 2-2h14c1.1 0 2 .9 2 2v1h-9c-1.11 0-2 .9-2 2v8c0 1.1.89 2 2 2h9zm-9-2h10V8H12v8zm4-2.5c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"/></svg>
+            </div>
+            <span class="actionLabel">Ticket Wallet</span>
+          </a>
+
+          <!-- Ticket Details -->
+          <a href="ticket-details.html" class="actionBtn">
+            <div class="actionIcon">
+              <svg viewBox="0 0 24 24"><path d="M22 10V6c0-1.11-.9-2-2-2H4c-1.1 0-1.99.89-1.99 2v4c1.1 0 1.99.9 1.99 2s-.89 2-2 2v4c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2v-4c-1.1 0-2-.9-2-2s.9-2 2-2zm-2-1.46c-1.19.69-2 1.99-2 3.46s.81 2.77 2 3.46V18H4v-2.54c1.19-.69 2-1.99 2-3.46 0-1.48-.8-2.77-1.99-3.46L4 6h16v2.54zM11 15h2v2h-2zm0-4h2v2h-2zm0-4h2v2h-2z"/></svg>
+            </div>
+            <span class="actionLabel">Ticket Details</span>
+          </a>
+
+          <!-- Scanner Entry -->
+          <a href="scanner.html" class="actionBtn">
+            <div class="actionIcon">
+              <svg viewBox="0 0 24 24"><path d="M9.5 6.5v3h-3v-3h3M11 5H5v6h6V5zm-1.5 9.5v3h-3v-3h3M11 13H5v6h6v-6zm6.5-6.5v3h-3v-3h3M19 5h-6v6h6V5zm-6 8h1.5v1.5H13V13zm1.5 1.5H16V16h-1.5v-1.5zM16 13h1.5v1.5H16V13zm-3 3h1.5v1.5H13V16zm1.5 1.5H16V19h-1.5v-1.5zM16 16h1.5v1.5H16V16zm1.5-1.5H19V16h-1.5v-1.5zm0 3H19V19h-1.5v-1.5zM19 13h-1.5v1.5H19V13z"/></svg>
+            </div>
+            <span class="actionLabel">Scanner Entry</span>
+          </a>
+
+          <!-- Settings -->
+          <button class="actionBtn" onclick="openSettingsModal()">
+            <div class="actionIcon">
+              <svg viewBox="0 0 24 24"><path d="M19.14 12.94c.04-.31.06-.63.06-.94 0-.31-.02-.63-.06-.94l2.03-1.58c.18-.14.23-.41.12-.61l-1.92-3.32c-.12-.22-.37-.29-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54c-.04-.24-.24-.41-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.04.31-.06.63-.06.94s.02.63.06.94l-2.03 1.58c-.18.14-.23.41-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z"/></svg>
+            </div>
+            <span class="actionLabel">Settings</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Settings Modal -->
+  <div class="modal-overlay" id="settingsModal">
+    <div class="modal-box">
+      <button class="modal-close" onclick="closeSettingsModal()" aria-label="Close">&times;</button>
+      <h3>Settings</h3>
+      <p>Configure prototype feature flags</p>
+      <div class="modal-content">
+        Feature flags coming soon
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function openSettingsModal() {
+      document.getElementById('settingsModal').classList.add('visible');
+    }
+    function closeSettingsModal() {
+      document.getElementById('settingsModal').classList.remove('visible');
+    }
+    document.getElementById('settingsModal').addEventListener('click', function(e) {
+      if (e.target === this) closeSettingsModal();
+    });
+  </script>
+</body>
+</html>
