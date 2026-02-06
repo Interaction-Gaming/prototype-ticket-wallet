@@ -355,5 +355,58 @@
       </div>
     </main>
   </div>
+
+  <script>
+    // State Lottery logo swapping
+    (function() {
+      const SETTINGS_KEY = 'tw_settings';
+      const logoMap = {
+        WY: {
+          'keno-logo.png': 'keno-logo.png',
+          'cowboy-draw-logo.png': 'cowboy-draw-logo.png',
+          'mega-millions-logo.png': 'mega-millions-logo.png',
+          '2-by-2-logo.png': '2-by-2-logo.png',
+          'powerball-logo.png': 'powerball-logo.png'
+        },
+        MI: {
+          'keno-logo.png': 'mi-keno.png',
+          'cowboy-draw-logo.png': 'mi-fantasy5.png',
+          'mega-millions-logo.png': 'mi-mega-millions.png',
+          '2-by-2-logo.png': 'mi-pick3.png',
+          'powerball-logo.png': 'mi-powerball.png'
+        }
+      };
+
+      function getSettings() {
+        const stored = localStorage.getItem(SETTINGS_KEY);
+        if (stored) {
+          try {
+            return JSON.parse(stored);
+          } catch (e) {
+            return { stateLottery: 'WY' };
+          }
+        }
+        return { stateLottery: 'WY' };
+      }
+
+      function applyLogoSwap() {
+        const settings = getSettings();
+        const state = settings.stateLottery || 'WY';
+        const map = logoMap[state];
+
+        document.querySelectorAll('.logoWrap img').forEach(img => {
+          const currentSrc = img.getAttribute('src');
+          for (const [wyLogo, targetLogo] of Object.entries(logoMap.WY)) {
+            if (currentSrc === wyLogo || currentSrc === logoMap.MI[wyLogo]) {
+              img.setAttribute('src', map[wyLogo]);
+              break;
+            }
+          }
+        });
+      }
+
+      document.addEventListener('DOMContentLoaded', applyLogoSwap);
+    })();
+  </script>
 </body>
 </html>
