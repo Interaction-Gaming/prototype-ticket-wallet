@@ -374,6 +374,13 @@
           'mega-millions-logo.png': 'mi-mega-millions.png',
           '2-by-2-logo.png': 'mi-pick3.png',
           'powerball-logo.png': 'mi-powerball.png'
+        },
+        MA: {
+          'keno-logo.png': 'ma-keno.png',
+          'cowboy-draw-logo.png': 'ma-pick5.png',
+          'mega-millions-logo.png': 'ma-mega-millions.png',
+          '2-by-2-logo.png': 'ma-pick3.png',
+          'powerball-logo.png': 'ma-powerball.png'
         }
       };
 
@@ -397,7 +404,7 @@
         document.querySelectorAll('.logoWrap img').forEach(img => {
           const currentSrc = img.getAttribute('src');
           for (const [wyLogo, targetLogo] of Object.entries(logoMap.WY)) {
-            if (currentSrc === wyLogo || currentSrc === logoMap.MI[wyLogo]) {
+            if (currentSrc === wyLogo || currentSrc === logoMap.MI[wyLogo] || currentSrc === logoMap.MA[wyLogo]) {
               img.setAttribute('src', map[wyLogo]);
               break;
             }
