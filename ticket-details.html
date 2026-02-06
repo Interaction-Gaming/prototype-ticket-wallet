@@ -102,6 +102,27 @@
       backdrop-filter: blur(6px);
     }
 
+    /* MI-only: Purchase Channel Badge */
+    .channelBadge{
+      display:none;
+      padding:8px 12px;
+      margin:-12px -12px 12px -12px;
+      border-radius:22px 22px 0 0;
+      font-size:11px;
+      font-weight:800;
+      text-transform:uppercase;
+      letter-spacing:.4px;
+      text-align:center;
+    }
+    .channelBadge.in-store{
+      color:#1f7a37;
+      background:rgba(38,142,63,.15);
+      border-bottom:1px solid rgba(38,142,63,.2);
+    }
+    body.mi-mode .channelBadge{
+      display:block;
+    }
+
     /* ===== TOP MODULE (refined grid) ===== */
     .topGrid{
       display:grid;
@@ -454,6 +475,8 @@
 
     <main>
       <div class="card">
+        <!-- MI-only: Purchase Channel Badge -->
+        <div class="channelBadge in-store">In-Store Purchase</div>
 
         <!-- TOP MODULE (per your grouping) -->
         <div class="topGrid">
@@ -899,6 +922,13 @@
         const settings = getSettings();
         const state = settings.stateLottery || 'WY';
         const map = logoMap[state];
+
+        // Add/remove mi-mode class for MI-specific features
+        if (state === 'MI') {
+          document.body.classList.add('mi-mode');
+        } else {
+          document.body.classList.remove('mi-mode');
+        }
 
         document.querySelectorAll('.logoTile img').forEach(img => {
           const currentSrc = img.getAttribute('src');

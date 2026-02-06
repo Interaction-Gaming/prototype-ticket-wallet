@@ -271,6 +271,46 @@
       display:none;
     }
 
+    /* MI-only: Purchase Channel Header */
+    .channelHeader{
+      display:none;
+      padding:8px 12px;
+      margin:-12px -12px 12px -12px;
+      border-radius:18px 18px 0 0;
+      font-size:11px;
+      font-weight:800;
+      text-transform:uppercase;
+      letter-spacing:.4px;
+      color:rgba(0,0,0,.6);
+      background:rgba(0,0,0,.06);
+      border-bottom:1px solid rgba(0,0,0,.08);
+    }
+    .channelHeader.in-store{
+      color:#1f7a37;
+      background:rgba(38,142,63,.10);
+    }
+    .channelHeader.online{
+      color:#0066cc;
+      background:rgba(0,102,204,.10);
+    }
+    body.mi-mode .channelHeader{
+      display:block;
+    }
+
+    /* MI-only: Purchased At filter group */
+    .filterGroup.mi-only{
+      display:none;
+    }
+    body.mi-mode .filterGroup.mi-only{
+      display:block;
+    }
+    .filterDivider.mi-only{
+      display:none;
+    }
+    body.mi-mode .filterDivider.mi-only{
+      display:block;
+    }
+
     /* ----- Ticket Card ----- */
     .ticketCard{
       background:var(--paper);
@@ -632,6 +672,15 @@
               <div class="filterOption" data-status="expired">Expired</div>
             </div>
           </div>
+          <div class="filterDivider mi-only"></div>
+          <div class="filterGroup mi-only">
+            <div class="filterGroupLabel">Purchased At</div>
+            <div class="filterOptions" id="channelFilters">
+              <div class="filterOption active" data-channel="all">All</div>
+              <div class="filterOption" data-channel="in-store">In-Store</div>
+              <div class="filterOption" data-channel="online">Online</div>
+            </div>
+          </div>
           <div class="filterDivider"></div>
           <div class="filterGroup">
             <div class="filterToggle">
@@ -706,7 +755,8 @@
         </script>
 
         <!-- 2 by 2 (Draws Open) -->
-        <article class="ticketCard" data-game-filter="2by2" data-status-filter="open" data-date="2025-10-15" data-winnings="0">
+        <article class="ticketCard" data-game-filter="2by2" data-status-filter="open" data-date="2025-10-15" data-winnings="0" data-channel="in-store">
+          <div class="channelHeader in-store">In-Store Purchase</div>
           <div class="cardTop">
             <div class="logoWrap"><img src="2-by-2-logo.png" alt="2 by 2 logo"></div>
             <div class="cardTopRight">
@@ -730,7 +780,8 @@
         </article>
 
         <!-- Cowboy Draw (Complete) -->
-        <article class="ticketCard" data-game="cowboy" data-game-filter="cowboy" data-status-filter="complete" data-date="2026-01-19" data-winnings="12">
+        <article class="ticketCard" data-game="cowboy" data-game-filter="cowboy" data-status-filter="complete" data-date="2026-01-19" data-winnings="12" data-channel="in-store">
+          <div class="channelHeader in-store">In-Store Purchase</div>
           <div class="cardTop">
             <div class="logoWrap"><img src="cowboy-draw-logo.png" alt="Cowboy Draw logo"></div>
             <div class="cardTopRight">
@@ -754,7 +805,8 @@
         </article>
 
         <!-- Powerball (Paid) — Cash Out disabled -->
-        <article class="ticketCard" data-game="powerball" data-game-filter="powerball" data-status-filter="paid" data-date="2025-09-08" data-winnings="250">
+        <article class="ticketCard" data-game="powerball" data-game-filter="powerball" data-status-filter="paid" data-date="2025-09-08" data-winnings="250" data-channel="online">
+          <div class="channelHeader online">Online Purchase</div>
           <div class="cardTop">
             <div class="logoWrap"><img src="powerball-logo.png" alt="Powerball logo"></div>
             <div class="cardTopRight">
@@ -778,7 +830,8 @@
         </article>
 
         <!-- Keno (Draws Open) -->
-        <article class="ticketCard" data-game="keno-open" data-game-filter="keno" data-status-filter="open" data-date="2026-02-05" data-winnings="32">
+        <article class="ticketCard" data-game="keno-open" data-game-filter="keno" data-status-filter="open" data-date="2026-02-05" data-winnings="32" data-channel="in-store">
+          <div class="channelHeader in-store">In-Store Purchase</div>
           <div class="cardTop">
             <div class="logoWrap"><img src="keno-logo.png" alt="Keno logo"></div>
             <div class="cardTopRight">
@@ -802,7 +855,8 @@
         </article>
 
         <!-- Mega Millions (Open) -->
-        <article class="ticketCard" data-game-filter="megamillions" data-status-filter="open" data-date="2025-11-22" data-winnings="0">
+        <article class="ticketCard" data-game-filter="megamillions" data-status-filter="open" data-date="2025-11-22" data-winnings="0" data-channel="online">
+          <div class="channelHeader online">Online Purchase</div>
           <div class="cardTop">
             <div class="logoWrap"><img src="mega-millions-logo.png" alt="Mega Millions logo"></div>
             <div class="cardTopRight">
@@ -826,7 +880,8 @@
         </article>
 
         <!-- Keno (Expired) — Cash Out disabled -->
-        <article class="ticketCard" data-game="keno" data-game-filter="keno" data-status-filter="expired" data-date="2024-03-15" data-winnings="0">
+        <article class="ticketCard" data-game="keno" data-game-filter="keno" data-status-filter="expired" data-date="2024-03-15" data-winnings="0" data-channel="in-store">
+          <div class="channelHeader in-store">In-Store Purchase</div>
           <div class="cardTop">
             <div class="logoWrap"><img src="keno-logo.png" alt="Keno logo"></div>
             <div class="cardTopRight">
@@ -1014,6 +1069,7 @@
   let currentFilters = {
     game: 'all',
     status: 'all',
+    channel: 'all',
     winnersOnly: false,
     sort: 'newest'
   };
@@ -1050,6 +1106,16 @@
     });
   });
 
+  // Channel filter click handlers (MI only)
+  document.querySelectorAll('#channelFilters .filterOption').forEach(opt => {
+    opt.addEventListener('click', () => {
+      document.querySelectorAll('#channelFilters .filterOption').forEach(o => o.classList.remove('active'));
+      opt.classList.add('active');
+      currentFilters.channel = opt.dataset.channel;
+      applyFilters();
+    });
+  });
+
   // Sort option click handlers
   document.querySelectorAll('#sortOptions .filterOption').forEach(opt => {
     opt.addEventListener('click', () => {
@@ -1069,6 +1135,7 @@
     // Count active filters
     if (currentFilters.game !== 'all') activeFilterCount++;
     if (currentFilters.status !== 'all') activeFilterCount++;
+    if (currentFilters.channel !== 'all' && document.body.classList.contains('mi-mode')) activeFilterCount++;
     if (currentFilters.winnersOnly) activeFilterCount++;
 
     // Filter cards
@@ -1083,6 +1150,13 @@
       // Status filter
       if (currentFilters.status !== 'all' && card.dataset.statusFilter !== currentFilters.status) {
         show = false;
+      }
+
+      // Channel filter (MI only)
+      if (currentFilters.channel !== 'all' && document.body.classList.contains('mi-mode')) {
+        if (card.dataset.channel !== currentFilters.channel) {
+          show = false;
+        }
       }
 
       // Winners only filter
@@ -1174,6 +1248,13 @@
       const settings = getSettings();
       const state = settings.stateLottery || 'WY';
       const map = logoMap[state];
+
+      // Add/remove mi-mode class for MI-specific features
+      if (state === 'MI') {
+        document.body.classList.add('mi-mode');
+      } else {
+        document.body.classList.remove('mi-mode');
+      }
 
       document.querySelectorAll('.logoWrap img').forEach(img => {
         const currentSrc = img.getAttribute('src');
