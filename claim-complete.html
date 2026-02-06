@@ -371,7 +371,7 @@
         <div class="transferDetails">
           <div class="detailRow">
             <span class="detailLabel">From</span>
-            <span class="detailValue">Cowboy Draw</span>
+            <span class="detailValue" id="fromLottery">Wyoming Lottery</span>
           </div>
           <div class="detailRow">
             <span class="detailLabel">Status</span>
@@ -392,5 +392,39 @@
       <div class="timestamp">February 5, 2026 at 9:32 AM</div>
     </main>
   </div>
+
+  <script>
+    // State Lottery "From" text
+    (function() {
+      const SETTINGS_KEY = 'tw_settings';
+      const lotteryNames = {
+        WY: 'Wyoming Lottery',
+        MI: 'Michigan Lottery'
+      };
+
+      function getSettings() {
+        const stored = localStorage.getItem(SETTINGS_KEY);
+        if (stored) {
+          try {
+            return JSON.parse(stored);
+          } catch (e) {
+            return { stateLottery: 'WY' };
+          }
+        }
+        return { stateLottery: 'WY' };
+      }
+
+      function applyLotteryName() {
+        const settings = getSettings();
+        const state = settings.stateLottery || 'WY';
+        const fromEl = document.getElementById('fromLottery');
+        if (fromEl) {
+          fromEl.textContent = lotteryNames[state] || lotteryNames.WY;
+        }
+      }
+
+      document.addEventListener('DOMContentLoaded', applyLotteryName);
+    })();
+  </script>
 </body>
 </html>
