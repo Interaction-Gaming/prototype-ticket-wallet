@@ -232,10 +232,53 @@
     .modal-content{
       min-height:80px;
       display:flex;
-      align-items:center;
-      justify-content:center;
+      flex-direction:column;
+      align-items:stretch;
+      justify-content:flex-start;
       color:rgba(255,255,255,.4);
       font-size:13px;
+      text-align:left;
+    }
+
+    /* Settings Controls */
+    .settingRow{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      padding:14px 0;
+      border-bottom:1px solid rgba(255,255,255,.1);
+    }
+    .settingRow:last-child{
+      border-bottom:none;
+    }
+    .settingLabel{
+      font-size:14px;
+      font-weight:600;
+      color:rgba(255,255,255,.9);
+    }
+    .settingOptions{
+      display:flex;
+      gap:8px;
+    }
+    .settingOption{
+      padding:8px 16px;
+      border-radius:8px;
+      font-size:13px;
+      font-weight:700;
+      background:rgba(255,255,255,.08);
+      color:rgba(255,255,255,.6);
+      border:1px solid rgba(255,255,255,.12);
+      cursor:pointer;
+      transition:all .15s ease;
+    }
+    .settingOption:hover{
+      background:rgba(255,255,255,.12);
+      color:rgba(255,255,255,.8);
+    }
+    .settingOption.active{
+      background:var(--gambyt-red);
+      color:#fff;
+      border-color:var(--gambyt-red);
     }
 
     /* Password Protection Overlay */
@@ -373,13 +416,53 @@
       <h3>Settings</h3>
       <p>Configure prototype feature flags</p>
       <div class="modal-content">
-        Feature flags coming soon
+        <div class="settingRow">
+          <span class="settingLabel">State Lottery</span>
+          <div class="settingOptions" id="stateLotteryOptions">
+            <button class="settingOption active" data-value="WY">WY</button>
+            <button class="settingOption" data-value="MI">MI</button>
+          </div>
+        </div>
       </div>
     </div>
   </div>
 
   <script>
+    // Settings management
+    const SETTINGS_KEY = 'tw_settings';
+
+    function getSettings() {
+      const stored = localStorage.getItem(SETTINGS_KEY);
+      if (stored) {
+        try {
+          return JSON.parse(stored);
+        } catch (e) {
+          return { stateLottery: 'WY' };
+        }
+      }
+      return { stateLottery: 'WY' };
+    }
+
+    function saveSettings(settings) {
+      localStorage.setItem(SETTINGS_KEY, JSON.stringify(settings));
+    }
+
+    function initSettingsModal() {
+      const settings = getSettings();
+      const options = document.querySelectorAll('#stateLotteryOptions .settingOption');
+      options.forEach(opt => {
+        opt.classList.toggle('active', opt.dataset.value === settings.stateLottery);
+        opt.addEventListener('click', () => {
+          options.forEach(o => o.classList.remove('active'));
+          opt.classList.add('active');
+          settings.stateLottery = opt.dataset.value;
+          saveSettings(settings);
+        });
+      });
+    }
+
     function openSettingsModal() {
+      initSettingsModal();
       document.getElementById('settingsModal').classList.add('visible');
     }
     function closeSettingsModal() {
