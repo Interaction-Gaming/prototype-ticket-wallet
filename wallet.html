@@ -39,7 +39,8 @@
       width:var(--phone-w);
       height:var(--phone-h);
       border-radius:28px;
-      overflow:hidden;
+      overflow:visible;
+      position:relative;
       background:linear-gradient(180deg,var(--teal-900), var(--teal-800) 34%, #0b2323 55%, #0a1d1d);
       box-shadow:0 20px 60px rgba(0,0,0,.55);
       display:flex;
@@ -81,27 +82,30 @@
     /* Global Home Button */
     .homeBtn{
       position:absolute;
-      right:0;
-      top:50%;
-      transform:translateY(-50%);
+      left:308px;
+      top:-72px;
+      width:65px;
+      height:25px;
       display:flex;
       align-items:center;
+      justify-content:center;
       gap:4px;
-      padding:6px 10px;
-      border-radius:10px;
+      padding:0;
+      border-radius:6px;
       text-decoration:none;
-      background:#E8272C;
+      background:#000;
       color:#fff;
       font-weight:700;
-      font-size:11px;
-      box-shadow:0 4px 12px rgba(232,39,44,.35);
+      font-size:10px;
+      border:2px solid #fff;
       transition:background .15s ease, transform .1s ease;
+      z-index:100;
     }
-    .homeBtn:hover{ background:#C41E22; }
-    .homeBtn:active{ transform:translateY(-50%) scale(.97); }
+    .homeBtn:hover{ background:#333; }
+    .homeBtn:active{ transform:scale(.97); }
     .homeBtn svg{
-      width:14px;
-      height:14px;
+      width:12px;
+      height:12px;
       fill:currentColor;
     }
 
@@ -321,6 +325,14 @@
       background:rgba(0,102,204,.10);
     }
     body.mi-mode .channelHeader{
+      display:block;
+    }
+
+    /* MI/MA-only: Online ticket cards */
+    .ticketCard.mi-only-card{
+      display:none;
+    }
+    body.mi-mode .ticketCard.mi-only-card{
       display:block;
     }
 
@@ -662,12 +674,14 @@
       <div class="titleRow">
         <a class="back" href="scanner.html" aria-label="Back to Ticket Scanner">←</a>
         <div class="title">Ticket Wallet</div>
-        <a class="homeBtn" href="index.html" aria-label="Go to Home">
-          <svg viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
-          Home
-        </a>
       </div>
     </header>
+
+    <!-- Global Home Button -->
+    <a class="homeBtn" href="index.html" aria-label="Go to Home">
+      <svg viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
+      Home
+    </a>
 
     <!-- Filter/Sort Control -->
     <div class="filterControl" id="filterControl">
@@ -784,6 +798,31 @@
             return frag;
           }
         </script>
+
+        <!-- MI/MA Online Ticket (Fantasy 5 / Pick 5) - Only visible in MI/MA mode -->
+        <article class="ticketCard mi-only-card" data-game="online-fantasy" data-game-filter="cowboy" data-status-filter="open" data-date="2026-02-09" data-winnings="1" data-channel="online">
+          <div class="channelHeader online">Online Purchase</div>
+          <div class="cardTop">
+            <div class="logoWrap"><img src="mi-fantasy5.png" alt="Fantasy 5 logo" class="online-ticket-logo"></div>
+            <div class="cardTopRight">
+              <div class="purchaseDate">Purchased: <span>Feb 9, 2026</span></div>
+              <span class="badge open">Draws Open</span>
+            </div>
+          </div>
+
+          <div class="actionGrid" id="aOnline"></div>
+
+          <div class="cardBottom">
+            <div>
+              <div class="metricLabel">Ticket Cost</div>
+              <div class="metricValue">$5</div>
+            </div>
+            <div style="text-align:right;">
+              <div class="metricLabel">Ticket Winnings</div>
+              <div class="metricValue winningsValue">$1</div>
+            </div>
+          </div>
+        </article>
 
         <!-- 2 by 2 (Draws Open) -->
         <article class="ticketCard" data-game-filter="2by2" data-status-filter="open" data-date="2025-10-15" data-winnings="0" data-channel="in-store">
@@ -947,6 +986,9 @@
     document.getElementById('a4').appendChild(renderActions(true));  // Mega Millions - Cash Out disabled
     document.getElementById('a5').appendChild(renderActions(true, true));  // Keno Expired - all disabled
     document.getElementById('a6').appendChild(renderActions(false)); // Keno Open - Cash Out enabled (shows modal)
+    if (document.getElementById('aOnline')) {
+      document.getElementById('aOnline').appendChild(renderActions(false)); // Online ticket - Cash Out enabled (shows modal)
+    }
 
     // Click hooks (disabled buttons ignored)
     document.querySelectorAll('.miniAction').forEach(btn => {
@@ -1018,6 +1060,18 @@
   </div>
 </div>
 
+<!-- Online Ticket Cash Out Modal -->
+<div class="modal-overlay" id="onlineTicketModal">
+  <div class="modal-box" style="position:relative">
+    <button class="modal-close" onclick="closeOnlineTicketModal()" aria-label="Close">&times;</button>
+    <h3>Online Purchase</h3>
+    <p>Tickets purchased online are automatically paid to your wallet.</p>
+    <div class="modal-buttons">
+      <button class="modal-btn primary" onclick="closeOnlineTicketModal()">Dismiss</button>
+    </div>
+  </div>
+</div>
+
 <script>
   function openKenoModal() {
     document.getElementById('kenoModal').classList.add('visible');
@@ -1055,6 +1109,40 @@
   document.getElementById('openDrawsModal').addEventListener('click', function(e) {
     if (e.target === this) closeOpenDrawsModal();
   });
+
+  // Online Ticket modal functions
+  function openOnlineTicketModal() {
+    document.getElementById('onlineTicketModal').classList.add('visible');
+  }
+  function closeOnlineTicketModal() {
+    document.getElementById('onlineTicketModal').classList.remove('visible');
+  }
+  // Close modal when clicking outside
+  document.getElementById('onlineTicketModal').addEventListener('click', function(e) {
+    if (e.target === this) closeOnlineTicketModal();
+  });
+
+  // Wire "View Ticket" and "Cash Out" on the Online ticket card
+  const onlineCard = document.querySelector('.ticketCard[data-game="online-fantasy"]');
+
+  if (onlineCard) {
+    const onlineViewMore = onlineCard.querySelector('[data-action="more"]:not(.disabled)');
+    const onlineCashOut = onlineCard.querySelector('[data-action="cash"]:not(.disabled)');
+
+    if (onlineViewMore) {
+      onlineViewMore.classList.add('has-destination');
+      onlineViewMore.addEventListener('click', () => {
+        window.location.href = 'online-ticket-details.html';
+      });
+    }
+
+    if (onlineCashOut) {
+      onlineCashOut.classList.add('has-destination');
+      onlineCashOut.addEventListener('click', () => {
+        openOnlineTicketModal();
+      });
+    }
+  }
 
   // Wire "View Ticket" and "Cash Out" on the Keno (Draws Open) card
   const kenoOpenCard = document.querySelector('.ticketCard[data-game="keno-open"]');
@@ -1304,6 +1392,18 @@
           }
         }
       });
+
+      // Handle online ticket logo specifically
+      const onlineTicketLogo = document.querySelector('.online-ticket-logo');
+      if (onlineTicketLogo) {
+        if (state === 'MI') {
+          onlineTicketLogo.setAttribute('src', 'mi-fantasy5.png');
+          onlineTicketLogo.setAttribute('alt', 'Fantasy 5 logo');
+        } else if (state === 'MA') {
+          onlineTicketLogo.setAttribute('src', 'ma-pick5.png');
+          onlineTicketLogo.setAttribute('alt', 'Mass Cash logo');
+        }
+      }
     }
 
     document.addEventListener('DOMContentLoaded', applyLogoSwap);

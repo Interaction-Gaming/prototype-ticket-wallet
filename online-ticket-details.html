@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Ticket Details</title>
+  <title>Online Ticket Details</title>
 
   <style>
     :root{
@@ -133,9 +133,8 @@
       backdrop-filter: blur(6px);
     }
 
-    /* MI-only: Purchase Channel Badge */
+    /* Purchase Channel Badge */
     .channelBadge{
-      display:none;
       padding:8px 12px;
       margin:-12px -12px 12px -12px;
       border-radius:22px 22px 0 0;
@@ -144,14 +143,9 @@
       text-transform:uppercase;
       letter-spacing:.4px;
       text-align:center;
-    }
-    .channelBadge.in-store{
-      color:#1f7a37;
-      background:rgba(38,142,63,.15);
-      border-bottom:1px solid rgba(38,142,63,.2);
-    }
-    body.mi-mode .channelBadge{
-      display:block;
+      color:#0066cc;
+      background:rgba(0,102,204,.15);
+      border-bottom:1px solid rgba(0,102,204,.2);
     }
 
     /* ===== TOP MODULE (refined grid) ===== */
@@ -215,9 +209,9 @@
       border-radius:999px;
       font-weight:1000;
       font-size:12px;
-      border:1px solid rgba(0,0,0,.10);
-      background:rgba(0,0,0,.08);
-      color:rgba(0,0,0,.72);
+      border:1px solid rgba(15,92,87,.18);
+      background:rgba(15,92,87,.12);
+      color:var(--teal-700);
       width:max-content;
     }
 
@@ -329,6 +323,11 @@
       background:rgba(0,0,0,.06);
       border-color:rgba(0,0,0,.10);
       color:rgba(0,0,0,.68);
+    }
+    .totalChip.upcoming{
+      background:rgba(220,53,69,.12);
+      border-color:rgba(220,53,69,.25);
+      color:#dc3545;
     }
 
     .lines{
@@ -512,45 +511,45 @@
 
     <main>
       <div class="card">
-        <!-- MI-only: Purchase Channel Badge -->
-        <div class="channelBadge in-store">In-Store Purchase</div>
+        <!-- Purchase Channel Badge -->
+        <div class="channelBadge">Online Purchase</div>
 
-        <!-- TOP MODULE (per your grouping) -->
+        <!-- TOP MODULE -->
         <div class="topGrid">
           <!-- Row 1, Col 1: Game logo -->
           <div class="logoTile">
-            <img src="cowboy-draw-logo.png" alt="Cowboy Draw logo">
+            <img src="mi-fantasy5.png" alt="Fantasy 5 logo" id="gameLogo">
           </div>
 
           <!-- Row 1, Col 2: Purchase Date -->
           <div class="infoTile">
             <div class="label">Purchase Date</div>
-            <div class="value">January 19, 2026</div>
+            <div class="value">February 9, 2026</div>
           </div>
 
           <!-- Row 2, span 2: Ticket Status -->
           <div class="infoTile span2">
             <div class="label">Ticket Status</div>
-            <div class="value"><span class="statusPill">Draws Complete</span></div>
+            <div class="value"><span class="statusPill">Draws Open</span></div>
           </div>
 
           <!-- Row 3, Col 1: Ticket Cost -->
           <div class="infoTile">
             <div class="label">Ticket Cost</div>
-            <div class="value">$1</div>
+            <div class="value">$5</div>
           </div>
 
           <!-- Row 3, Col 2: Ticket Winnings -->
           <div class="infoTile">
             <div class="label">Ticket Winnings</div>
-            <div class="value winningsBig">$12</div>
+            <div class="value winningsBig">$1</div>
           </div>
 
           <!-- Row 4, span 2: Draw Date info -->
           <div class="infoTile span2 drawDateRow">
             <div class="label">Draw Date</div>
             <div class="value">
-              <span id="activeDrawDate">January 19, 2026</span>
+              <span id="activeDrawDate">February 9, 2026</span>
               <span class="activePill" id="activeDrawIndex">Draw 1 of 5</span>
             </div>
           </div>
@@ -564,14 +563,14 @@
 
         <div class="drawDeck" id="drawDeck" aria-label="Draw cards (swipe horizontally)">
 
-          <!-- Draw 1 (Mon) - $0 total -->
-          <article class="drawCard" data-date="January 19, 2026" data-index="1">
+          <!-- Draw 1 (Feb 9) - $1 total - 2 matches -->
+          <article class="drawCard" data-date="February 9, 2026" data-index="1">
             <div class="drawTop">
               <div>
-                <div class="drawDate">January 19, 2026</div>
-                <div class="drawSub">Monday Drawing</div>
+                <div class="drawDate">February 9, 2026</div>
+                <div class="drawSub">Sunday Drawing</div>
               </div>
-              <div class="totalChip zero">Total: $0</div>
+              <div class="totalChip">Total: $1</div>
             </div>
 
             <div class="lines">
@@ -579,62 +578,91 @@
                 <div class="lineLeft">
                   <div class="lineTitle">Line 1</div>
                   <div class="nums">
-                    <div class="ball">3</div><div class="ball">11</div><div class="ball">19</div><div class="ball">28</div><div class="ball">42</div>
+                    <div class="ball match">7</div><div class="ball">14</div><div class="ball match">22</div><div class="ball">31</div><div class="ball">38</div>
                   </div>
                 </div>
-                <div class="winBadge">$0</div>
-              </div>
-
-              <div class="lineRow">
-                <div class="lineLeft">
-                  <div class="lineTitle">Line 2</div>
-                  <div class="nums">
-                    <div class="ball">6</div><div class="ball">14</div><div class="ball">27</div><div class="ball">33</div><div class="ball">45</div>
-                  </div>
-                </div>
-                <div class="winBadge">$0</div>
-              </div>
-
-              <div class="lineRow">
-                <div class="lineLeft">
-                  <div class="lineTitle">Line 3</div>
-                  <div class="nums">
-                    <div class="ball">1</div><div class="ball">9</div><div class="ball">22</div><div class="ball">37</div><div class="ball">41</div>
-                  </div>
-                </div>
-                <div class="winBadge">$0</div>
-              </div>
-
-              <div class="lineRow">
-                <div class="lineLeft">
-                  <div class="lineTitle">Line 4</div>
-                  <div class="nums">
-                    <div class="ball">7</div><div class="ball">16</div><div class="ball">24</div><div class="ball">30</div><div class="ball">44</div>
-                  </div>
-                </div>
-                <div class="winBadge">$0</div>
-              </div>
-
-              <div class="lineRow">
-                <div class="lineLeft">
-                  <div class="lineTitle">Line 5</div>
-                  <div class="nums">
-                    <div class="ball">4</div><div class="ball">12</div><div class="ball">26</div><div class="ball">35</div><div class="ball">43</div>
-                  </div>
-                </div>
-                <div class="winBadge">$0</div>
+                <div class="winBadge win">$1</div>
               </div>
             </div>
           </article>
 
-          <!-- Draw 2 (Thu) - $5 total (two matches highlighted on winning line) -->
-          <article class="drawCard" data-date="January 22, 2026" data-index="2">
+          <!-- Draw 2 (Feb 10) - Draw Upcoming -->
+          <article class="drawCard" data-date="February 10, 2026" data-index="2">
             <div class="drawTop">
               <div>
-                <div class="drawDate">January 22, 2026</div>
+                <div class="drawDate">February 10, 2026</div>
+                <div class="drawSub">Monday Drawing</div>
+              </div>
+              <div class="totalChip upcoming">Draw Upcoming</div>
+            </div>
+
+            <div class="lines">
+              <div class="lineRow">
+                <div class="lineLeft">
+                  <div class="lineTitle">Line 1</div>
+                  <div class="nums">
+                    <div class="ball">7</div><div class="ball">14</div><div class="ball">22</div><div class="ball">31</div><div class="ball">38</div>
+                  </div>
+                </div>
+                <div class="winBadge">—</div>
+              </div>
+            </div>
+          </article>
+
+          <!-- Draw 3 (Feb 11) - Draw Upcoming -->
+          <article class="drawCard" data-date="February 11, 2026" data-index="3">
+            <div class="drawTop">
+              <div>
+                <div class="drawDate">February 11, 2026</div>
+                <div class="drawSub">Tuesday Drawing</div>
+              </div>
+              <div class="totalChip upcoming">Draw Upcoming</div>
+            </div>
+
+            <div class="lines">
+              <div class="lineRow">
+                <div class="lineLeft">
+                  <div class="lineTitle">Line 1</div>
+                  <div class="nums">
+                    <div class="ball">7</div><div class="ball">14</div><div class="ball">22</div><div class="ball">31</div><div class="ball">38</div>
+                  </div>
+                </div>
+                <div class="winBadge">—</div>
+              </div>
+            </div>
+          </article>
+
+          <!-- Draw 4 (Feb 12) - Draw Upcoming -->
+          <article class="drawCard" data-date="February 12, 2026" data-index="4">
+            <div class="drawTop">
+              <div>
+                <div class="drawDate">February 12, 2026</div>
+                <div class="drawSub">Wednesday Drawing</div>
+              </div>
+              <div class="totalChip upcoming">Draw Upcoming</div>
+            </div>
+
+            <div class="lines">
+              <div class="lineRow">
+                <div class="lineLeft">
+                  <div class="lineTitle">Line 1</div>
+                  <div class="nums">
+                    <div class="ball">7</div><div class="ball">14</div><div class="ball">22</div><div class="ball">31</div><div class="ball">38</div>
+                  </div>
+                </div>
+                <div class="winBadge">—</div>
+              </div>
+            </div>
+          </article>
+
+          <!-- Draw 5 (Feb 13) - Draw Upcoming -->
+          <article class="drawCard" data-date="February 13, 2026" data-index="5">
+            <div class="drawTop">
+              <div>
+                <div class="drawDate">February 13, 2026</div>
                 <div class="drawSub">Thursday Drawing</div>
               </div>
-              <div class="totalChip">Total: $5</div>
+              <div class="totalChip upcoming">Draw Upcoming</div>
             </div>
 
             <div class="lines">
@@ -642,239 +670,10 @@
                 <div class="lineLeft">
                   <div class="lineTitle">Line 1</div>
                   <div class="nums">
-                    <div class="ball">3</div><div class="ball">11</div><div class="ball">19</div><div class="ball">28</div><div class="ball">42</div>
+                    <div class="ball">7</div><div class="ball">14</div><div class="ball">22</div><div class="ball">31</div><div class="ball">38</div>
                   </div>
                 </div>
-                <div class="winBadge">$0</div>
-              </div>
-
-              <div class="lineRow">
-                <div class="lineLeft">
-                  <div class="lineTitle">Line 2</div>
-                  <div class="nums">
-                    <div class="ball">6</div><div class="ball match">14</div><div class="ball">27</div><div class="ball match">33</div><div class="ball">45</div>
-                  </div>
-                </div>
-                <div class="winBadge win">$5</div>
-              </div>
-
-              <div class="lineRow">
-                <div class="lineLeft">
-                  <div class="lineTitle">Line 3</div>
-                  <div class="nums">
-                    <div class="ball">1</div><div class="ball">9</div><div class="ball">22</div><div class="ball">37</div><div class="ball">41</div>
-                  </div>
-                </div>
-                <div class="winBadge">$0</div>
-              </div>
-
-              <div class="lineRow">
-                <div class="lineLeft">
-                  <div class="lineTitle">Line 4</div>
-                  <div class="nums">
-                    <div class="ball">7</div><div class="ball">16</div><div class="ball">24</div><div class="ball">30</div><div class="ball">44</div>
-                  </div>
-                </div>
-                <div class="winBadge">$0</div>
-              </div>
-
-              <div class="lineRow">
-                <div class="lineLeft">
-                  <div class="lineTitle">Line 5</div>
-                  <div class="nums">
-                    <div class="ball">4</div><div class="ball">12</div><div class="ball">26</div><div class="ball">35</div><div class="ball">43</div>
-                  </div>
-                </div>
-                <div class="winBadge">$0</div>
-              </div>
-            </div>
-          </article>
-
-          <!-- Draw 3 (Mon) - $2 total (one match highlighted on winning line) -->
-          <article class="drawCard" data-date="January 26, 2026" data-index="3">
-            <div class="drawTop">
-              <div>
-                <div class="drawDate">January 26, 2026</div>
-                <div class="drawSub">Monday Drawing</div>
-              </div>
-              <div class="totalChip">Total: $2</div>
-            </div>
-
-            <div class="lines">
-              <div class="lineRow">
-                <div class="lineLeft">
-                  <div class="lineTitle">Line 1</div>
-                  <div class="nums">
-                    <div class="ball">3</div><div class="ball">11</div><div class="ball">19</div><div class="ball">28</div><div class="ball">42</div>
-                  </div>
-                </div>
-                <div class="winBadge">$0</div>
-              </div>
-
-              <div class="lineRow">
-                <div class="lineLeft">
-                  <div class="lineTitle">Line 2</div>
-                  <div class="nums">
-                    <div class="ball">6</div><div class="ball">14</div><div class="ball">27</div><div class="ball">33</div><div class="ball">45</div>
-                  </div>
-                </div>
-                <div class="winBadge">$0</div>
-              </div>
-
-              <div class="lineRow">
-                <div class="lineLeft">
-                  <div class="lineTitle">Line 3</div>
-                  <div class="nums">
-                    <div class="ball">1</div><div class="ball match">9</div><div class="ball">22</div><div class="ball">37</div><div class="ball">41</div>
-                  </div>
-                </div>
-                <div class="winBadge win">$2</div>
-              </div>
-
-              <div class="lineRow">
-                <div class="lineLeft">
-                  <div class="lineTitle">Line 4</div>
-                  <div class="nums">
-                    <div class="ball">7</div><div class="ball">16</div><div class="ball">24</div><div class="ball">30</div><div class="ball">44</div>
-                  </div>
-                </div>
-                <div class="winBadge">$0</div>
-              </div>
-
-              <div class="lineRow">
-                <div class="lineLeft">
-                  <div class="lineTitle">Line 5</div>
-                  <div class="nums">
-                    <div class="ball">4</div><div class="ball">12</div><div class="ball">26</div><div class="ball">35</div><div class="ball">43</div>
-                  </div>
-                </div>
-                <div class="winBadge">$0</div>
-              </div>
-            </div>
-          </article>
-
-          <!-- Draw 4 (Thu) - $5 total (two matches highlighted on winning line) -->
-          <article class="drawCard" data-date="January 29, 2026" data-index="4">
-            <div class="drawTop">
-              <div>
-                <div class="drawDate">January 29, 2026</div>
-                <div class="drawSub">Thursday Drawing</div>
-              </div>
-              <div class="totalChip">Total: $5</div>
-            </div>
-
-            <div class="lines">
-              <div class="lineRow">
-                <div class="lineLeft">
-                  <div class="lineTitle">Line 1</div>
-                  <div class="nums">
-                    <div class="ball">3</div><div class="ball">11</div><div class="ball">19</div><div class="ball">28</div><div class="ball">42</div>
-                  </div>
-                </div>
-                <div class="winBadge">$0</div>
-              </div>
-
-              <div class="lineRow">
-                <div class="lineLeft">
-                  <div class="lineTitle">Line 2</div>
-                  <div class="nums">
-                    <div class="ball match">6</div><div class="ball">14</div><div class="ball">27</div><div class="ball">33</div><div class="ball match">45</div>
-                  </div>
-                </div>
-                <div class="winBadge win">$5</div>
-              </div>
-
-              <div class="lineRow">
-                <div class="lineLeft">
-                  <div class="lineTitle">Line 3</div>
-                  <div class="nums">
-                    <div class="ball">1</div><div class="ball">9</div><div class="ball">22</div><div class="ball">37</div><div class="ball">41</div>
-                  </div>
-                </div>
-                <div class="winBadge">$0</div>
-              </div>
-
-              <div class="lineRow">
-                <div class="lineLeft">
-                  <div class="lineTitle">Line 4</div>
-                  <div class="nums">
-                    <div class="ball">7</div><div class="ball">16</div><div class="ball">24</div><div class="ball">30</div><div class="ball">44</div>
-                  </div>
-                </div>
-                <div class="winBadge">$0</div>
-              </div>
-
-              <div class="lineRow">
-                <div class="lineLeft">
-                  <div class="lineTitle">Line 5</div>
-                  <div class="nums">
-                    <div class="ball">4</div><div class="ball">12</div><div class="ball">26</div><div class="ball">35</div><div class="ball">43</div>
-                  </div>
-                </div>
-                <div class="winBadge">$0</div>
-              </div>
-            </div>
-          </article>
-
-          <!-- Draw 5 (Mon) - $0 total -->
-          <article class="drawCard" data-date="February 2, 2026" data-index="5">
-            <div class="drawTop">
-              <div>
-                <div class="drawDate">February 2, 2026</div>
-                <div class="drawSub">Monday Drawing</div>
-              </div>
-              <div class="totalChip zero">Total: $0</div>
-            </div>
-
-            <div class="lines">
-              <div class="lineRow">
-                <div class="lineLeft">
-                  <div class="lineTitle">Line 1</div>
-                  <div class="nums">
-                    <div class="ball">3</div><div class="ball">11</div><div class="ball">19</div><div class="ball">28</div><div class="ball">42</div>
-                  </div>
-                </div>
-                <div class="winBadge">$0</div>
-              </div>
-
-              <div class="lineRow">
-                <div class="lineLeft">
-                  <div class="lineTitle">Line 2</div>
-                  <div class="nums">
-                    <div class="ball">6</div><div class="ball">14</div><div class="ball">27</div><div class="ball">33</div><div class="ball">45</div>
-                  </div>
-                </div>
-                <div class="winBadge">$0</div>
-              </div>
-
-              <div class="lineRow">
-                <div class="lineLeft">
-                  <div class="lineTitle">Line 3</div>
-                  <div class="nums">
-                    <div class="ball">1</div><div class="ball">9</div><div class="ball">22</div><div class="ball">37</div><div class="ball">41</div>
-                  </div>
-                </div>
-                <div class="winBadge">$0</div>
-              </div>
-
-              <div class="lineRow">
-                <div class="lineLeft">
-                  <div class="lineTitle">Line 4</div>
-                  <div class="nums">
-                    <div class="ball">7</div><div class="ball">16</div><div class="ball">24</div><div class="ball">30</div><div class="ball">44</div>
-                  </div>
-                </div>
-                <div class="winBadge">$0</div>
-              </div>
-
-              <div class="lineRow">
-                <div class="lineLeft">
-                  <div class="lineTitle">Line 5</div>
-                  <div class="nums">
-                    <div class="ball">4</div><div class="ball">12</div><div class="ball">26</div><div class="ball">35</div><div class="ball">43</div>
-                  </div>
-                </div>
-                <div class="winBadge">$0</div>
+                <div class="winBadge">—</div>
               </div>
             </div>
           </article>
@@ -923,32 +722,9 @@
   </script>
 
   <script>
-    // State Lottery logo swapping
+    // State Lottery logo swapping for online ticket
     (function() {
       const SETTINGS_KEY = 'tw_settings';
-      const logoMap = {
-        WY: {
-          'keno-logo.png': 'keno-logo.png',
-          'cowboy-draw-logo.png': 'cowboy-draw-logo.png',
-          'mega-millions-logo.png': 'mega-millions-logo.png',
-          '2-by-2-logo.png': '2-by-2-logo.png',
-          'powerball-logo.png': 'powerball-logo.png'
-        },
-        MI: {
-          'keno-logo.png': 'mi-keno.png',
-          'cowboy-draw-logo.png': 'mi-fantasy5.png',
-          'mega-millions-logo.png': 'mi-mega-millions.png',
-          '2-by-2-logo.png': 'mi-pick3.png',
-          'powerball-logo.png': 'mi-powerball.png'
-        },
-        MA: {
-          'keno-logo.png': 'ma-keno.png',
-          'cowboy-draw-logo.png': 'ma-pick5.png',
-          'mega-millions-logo.png': 'ma-mega-millions.png',
-          '2-by-2-logo.png': 'ma-pick3.png',
-          'powerball-logo.png': 'ma-powerball.png'
-        }
-      };
 
       function getSettings() {
         const stored = localStorage.getItem(SETTINGS_KEY);
@@ -965,24 +741,17 @@
       function applyLogoSwap() {
         const settings = getSettings();
         const state = settings.stateLottery || 'WY';
-        const map = logoMap[state];
+        const logo = document.getElementById('gameLogo');
 
-        // Add/remove mi-mode class for MI/MA-specific features
-        if (state === 'MI' || state === 'MA') {
-          document.body.classList.add('mi-mode');
-        } else {
-          document.body.classList.remove('mi-mode');
-        }
-
-        document.querySelectorAll('.logoTile img').forEach(img => {
-          const currentSrc = img.getAttribute('src');
-          for (const [wyLogo, targetLogo] of Object.entries(logoMap.WY)) {
-            if (currentSrc === wyLogo || currentSrc === logoMap.MI[wyLogo] || currentSrc === logoMap.MA[wyLogo]) {
-              img.setAttribute('src', map[wyLogo]);
-              break;
-            }
+        if (logo) {
+          if (state === 'MI') {
+            logo.setAttribute('src', 'mi-fantasy5.png');
+            logo.setAttribute('alt', 'Fantasy 5 logo');
+          } else if (state === 'MA') {
+            logo.setAttribute('src', 'ma-pick5.png');
+            logo.setAttribute('alt', 'Mass Cash logo');
           }
-        });
+        }
       }
 
       document.addEventListener('DOMContentLoaded', applyLogoSwap);
