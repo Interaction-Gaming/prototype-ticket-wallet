@@ -281,6 +281,27 @@
       border-color:var(--gambyt-red);
     }
 
+    /* Apply Settings Button */
+    .modal-apply{
+      width:100%;
+      margin-top:20px;
+      padding:14px 20px;
+      border:none;
+      border-radius:12px;
+      background:var(--gambyt-red);
+      color:#fff;
+      font-size:15px;
+      font-weight:700;
+      cursor:pointer;
+      transition:background .15s ease, transform .1s ease;
+    }
+    .modal-apply:hover{
+      background:var(--gambyt-red-dark);
+    }
+    .modal-apply:active{
+      transform:scale(.98);
+    }
+
     /* Password Protection Overlay */
     .pw-overlay{position:fixed;inset:0;background:rgba(0,0,0,.95);display:flex;align-items:center;justify-content:center;z-index:9999;flex-direction:column;gap:16px}
     .pw-overlay.hidden{display:none}
@@ -424,6 +445,7 @@
           </div>
         </div>
       </div>
+      <button class="modal-apply" onclick="closeSettingsModal()">Apply Settings</button>
     </div>
   </div>
 
