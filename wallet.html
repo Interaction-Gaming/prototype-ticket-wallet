@@ -1122,12 +1122,13 @@
     if (e.target === this) closeOnlineTicketModal();
   });
 
-  // Wire "View Ticket" and "Cash Out" on the Online ticket card
+  // Wire "View Ticket", "Cash Out", and "Buy Again" on the Online ticket card
   const onlineCard = document.querySelector('.ticketCard[data-game="online-fantasy"]');
 
   if (onlineCard) {
     const onlineViewMore = onlineCard.querySelector('[data-action="more"]:not(.disabled)');
     const onlineCashOut = onlineCard.querySelector('[data-action="cash"]:not(.disabled)');
+    const onlineBuyAgain = onlineCard.querySelector('[data-action="buy"]:not(.disabled)');
 
     if (onlineViewMore) {
       onlineViewMore.classList.add('has-destination');
@@ -1140,6 +1141,13 @@
       onlineCashOut.classList.add('has-destination');
       onlineCashOut.addEventListener('click', () => {
         openOnlineTicketModal();
+      });
+    }
+
+    if (onlineBuyAgain) {
+      onlineBuyAgain.classList.add('has-destination');
+      onlineBuyAgain.addEventListener('click', () => {
+        window.location.href = 'buy-online-pick5.html';
       });
     }
   }

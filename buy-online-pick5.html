@@ -1,0 +1,541 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Buy Online - Pick 5</title>
+
+  <style>
+    :root{
+      --phone-w:402px;
+      --phone-h:874px;
+      --orange:#f5a623;
+      --orange-dark:#e8941a;
+      --blue:#4a90d9;
+      --blue-dark:#3a7bc8;
+      --text-primary:rgba(0,0,0,.87);
+      --text-secondary:rgba(0,0,0,.55);
+      --border:rgba(0,0,0,.12);
+    }
+
+    *{ box-sizing:border-box; }
+    body{
+      margin:0;
+      font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","SF Pro Text","Segoe UI",Roboto,Arial,sans-serif;
+      background:#111;
+      display:flex;
+      justify-content:center;
+      padding:20px;
+    }
+
+    .phone{
+      width:var(--phone-w);
+      height:var(--phone-h);
+      border-radius:28px;
+      overflow:visible;
+      position:relative;
+      background:#f5f5f5;
+      box-shadow:0 20px 60px rgba(0,0,0,.55);
+      display:flex;
+      flex-direction:column;
+    }
+
+    /* Global Home Button */
+    .homeBtn{
+      position:absolute;
+      left:308px;
+      top:-72px;
+      width:65px;
+      height:25px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      gap:4px;
+      padding:0;
+      border-radius:6px;
+      text-decoration:none;
+      background:#000;
+      color:#fff;
+      font-weight:700;
+      font-size:10px;
+      border:2px solid #fff;
+      transition:background .15s ease, transform .1s ease;
+      z-index:100;
+    }
+    .homeBtn:hover{ background:#333; }
+    .homeBtn:active{ transform:scale(.97); }
+    .homeBtn svg{
+      width:12px;
+      height:12px;
+      fill:currentColor;
+    }
+
+    /* Header with orange gradient */
+    .header{
+      background:linear-gradient(180deg, #f7b733 0%, #f5a623 100%);
+      padding:16px 16px 20px;
+      padding-top:50px;
+      text-align:center;
+      position:relative;
+    }
+
+    .logoWrap{
+      width:120px;
+      height:50px;
+      margin:0 auto 12px;
+      background:#fff;
+      border-radius:10px;
+      overflow:hidden;
+      box-shadow:0 4px 12px rgba(0,0,0,.15);
+    }
+    .logoWrap img{
+      width:100%;
+      height:100%;
+      object-fit:cover;
+      display:block;
+    }
+
+    .timeLeft{
+      font-size:11px;
+      font-weight:700;
+      color:rgba(0,0,0,.7);
+      margin-bottom:4px;
+    }
+    .timeLeft span{
+      color:#000;
+      font-weight:800;
+    }
+
+    .jackpot{
+      font-size:12px;
+      font-weight:700;
+      color:rgba(0,0,0,.7);
+    }
+    .jackpot span{
+      color:#000;
+      font-weight:900;
+      font-size:14px;
+    }
+
+    /* Form section */
+    .formSection{
+      padding:16px;
+      background:#fff;
+      border-bottom:1px solid var(--border);
+    }
+
+    .formRow{
+      display:flex;
+      gap:12px;
+      margin-bottom:16px;
+    }
+
+    .formGroup{
+      flex:1;
+    }
+
+    .formLabel{
+      font-size:11px;
+      font-weight:600;
+      color:var(--text-secondary);
+      margin-bottom:6px;
+      display:block;
+    }
+
+    .selectWrap{
+      position:relative;
+    }
+
+    .selectBox{
+      width:100%;
+      padding:12px 36px 12px 12px;
+      border:1px solid var(--border);
+      border-radius:8px;
+      background:#fff;
+      font-size:14px;
+      font-weight:600;
+      color:var(--text-primary);
+      appearance:none;
+      cursor:pointer;
+    }
+
+    .selectWrap::after{
+      content:'';
+      position:absolute;
+      right:12px;
+      top:50%;
+      transform:translateY(-50%);
+      width:0;
+      height:0;
+      border-left:5px solid transparent;
+      border-right:5px solid transparent;
+      border-top:6px solid var(--text-secondary);
+      pointer-events:none;
+    }
+
+    /* Action buttons */
+    .actionRow{
+      display:flex;
+      gap:12px;
+    }
+
+    .actionBtn{
+      flex:1;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      gap:8px;
+      padding:14px 16px;
+      border:2px solid var(--orange);
+      border-radius:8px;
+      background:#fff;
+      font-size:14px;
+      font-weight:700;
+      color:var(--orange-dark);
+      cursor:pointer;
+      transition:background .15s ease, transform .1s ease;
+    }
+    .actionBtn:hover{
+      background:rgba(245,166,35,.08);
+    }
+    .actionBtn:active{
+      transform:scale(.98);
+    }
+    .actionBtn svg{
+      width:18px;
+      height:18px;
+      fill:currentColor;
+    }
+
+    /* Ticket section */
+    .ticketSection{
+      flex:1;
+      padding:16px;
+      overflow-y:auto;
+    }
+
+    .ticketCard{
+      background:#fff;
+      border-radius:12px;
+      padding:16px;
+      box-shadow:0 2px 8px rgba(0,0,0,.06);
+      border:1px solid var(--border);
+    }
+
+    .ticketHeader{
+      display:flex;
+      align-items:center;
+      gap:12px;
+      margin-bottom:16px;
+    }
+
+    .ticketToggle{
+      width:24px;
+      height:24px;
+      border-radius:50%;
+      border:2px solid var(--blue);
+      background:#fff;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      cursor:pointer;
+      transition:background .15s ease;
+    }
+    .ticketToggle.active{
+      background:var(--blue);
+    }
+    .ticketToggle.active::after{
+      content:'';
+      width:8px;
+      height:8px;
+      border-radius:50%;
+      background:#fff;
+    }
+
+    .ticketLabel{
+      font-size:14px;
+      font-weight:600;
+      color:var(--text-secondary);
+    }
+
+    .numberBalls{
+      display:flex;
+      justify-content:center;
+      gap:12px;
+    }
+
+    .ball{
+      width:44px;
+      height:44px;
+      border-radius:50%;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-size:16px;
+      font-weight:700;
+      background:#fff;
+      border:2px solid var(--border);
+      color:var(--text-primary);
+      box-shadow:0 2px 6px rgba(0,0,0,.08);
+    }
+
+    /* Footer */
+    .footer{
+      padding:16px 20px 32px;
+      background:#fff;
+      border-top:1px solid var(--border);
+    }
+
+    .priceRow{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      margin-bottom:16px;
+    }
+
+    .priceInfo{
+      display:flex;
+      flex-direction:column;
+      gap:4px;
+    }
+
+    .price{
+      font-size:16px;
+      font-weight:700;
+      color:var(--text-primary);
+    }
+
+    .gameRules{
+      font-size:13px;
+      font-weight:600;
+      color:var(--blue);
+      text-decoration:underline;
+      cursor:pointer;
+    }
+
+    .addToCartBtn{
+      width:100%;
+      padding:16px 24px;
+      border:none;
+      border-radius:10px;
+      background:var(--blue);
+      color:#fff;
+      font-size:16px;
+      font-weight:700;
+      cursor:pointer;
+      transition:background .15s ease, transform .1s ease;
+      box-shadow:0 4px 12px rgba(74,144,217,.35);
+    }
+    .addToCartBtn:hover{
+      background:var(--blue-dark);
+    }
+    .addToCartBtn:active{
+      transform:scale(.98);
+    }
+
+    /* Clickable Hotspot Effects */
+    a[href$=".html"] {
+      position: relative;
+      transition: box-shadow 0.2s ease, transform 0.2s ease;
+    }
+    a[href$=".html"]:hover {
+      box-shadow: 0 0 0 4px rgba(0, 122, 255, 0.35), 0 0 20px rgba(0, 122, 255, 0.25);
+    }
+    @keyframes hotspotPulse {
+      0%, 100% { box-shadow: 0 0 0 0 rgba(0, 122, 255, 0); }
+      50% { box-shadow: 0 0 0 6px rgba(0, 122, 255, 0.4), 0 0 24px rgba(0, 122, 255, 0.3); }
+    }
+    .hotspot-pulse {
+      animation: hotspotPulse 1s ease-in-out;
+    }
+
+    /* Password Protection Overlay */
+    .pw-overlay{position:fixed;inset:0;background:rgba(0,0,0,.95);display:flex;align-items:center;justify-content:center;z-index:9999;flex-direction:column;gap:16px}
+    .pw-overlay.hidden{display:none}
+    .pw-box{background:#1a1a1a;padding:32px;border-radius:16px;text-align:center;max-width:300px}
+    .pw-box h2{color:#fff;margin:0 0 8px;font-size:20px}
+    .pw-box p{color:#888;margin:0 0 20px;font-size:14px}
+    .pw-box input{width:100%;padding:12px;border:1px solid #333;border-radius:8px;background:#222;color:#fff;font-size:16px;box-sizing:border-box;text-align:center}
+    .pw-box input:focus{outline:none;border-color:#0f5c57}
+    .pw-box button{width:100%;margin-top:12px;padding:12px;border:none;border-radius:8px;background:#0f5c57;color:#fff;font-size:16px;font-weight:600;cursor:pointer}
+    .pw-box button:hover{background:#0a4a45}
+    .pw-error{color:#ff6b6b;font-size:13px;margin-top:8px;display:none}
+  </style>
+</head>
+
+<body>
+  <div class="pw-overlay" id="pwOverlay">
+    <div class="pw-box">
+      <h2>Protected Prototype</h2>
+      <p>Enter password to continue</p>
+      <input type="password" id="pwInput" placeholder="Password" autocomplete="off">
+      <button onclick="checkPw()">Enter</button>
+      <div class="pw-error" id="pwError">Incorrect password</div>
+    </div>
+  </div>
+  <script>
+    (function(){var k='tw_auth';if(localStorage.getItem(k)==='1'){document.getElementById('pwOverlay').classList.add('hidden');}})();
+    function checkPw(){var p=document.getElementById('pwInput').value;if(p==='winning'){localStorage.setItem('tw_auth','1');document.getElementById('pwOverlay').classList.add('hidden');}else{document.getElementById('pwError').style.display='block';document.getElementById('pwInput').value='';}}
+    document.getElementById('pwInput').addEventListener('keypress',function(e){if(e.key==='Enter')checkPw();});
+  </script>
+  <script>
+    (function(){
+      const clickables = () => document.querySelectorAll('a[href$=".html"]:not(.pw-overlay *)');
+      function triggerEntryPulse(el) {
+        el.classList.add('hotspot-pulse');
+        setTimeout(() => {
+          el.classList.remove('hotspot-pulse');
+          setTimeout(() => {
+            el.classList.add('hotspot-pulse');
+            setTimeout(() => el.classList.remove('hotspot-pulse'), 1000);
+          }, 1000);
+        }, 1000);
+      }
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting && !entry.target.dataset.pulsed) {
+            entry.target.dataset.pulsed = '1';
+            triggerEntryPulse(entry.target);
+          }
+        });
+      }, { threshold: 0.5 });
+      let idleTimer;
+      function resetIdle() {
+        clearTimeout(idleTimer);
+        idleTimer = setTimeout(() => {
+          clickables().forEach(el => triggerEntryPulse(el));
+        }, 3000);
+      }
+      document.addEventListener('DOMContentLoaded', () => {
+        clickables().forEach(el => observer.observe(el));
+        ['mousemove','keydown','click','scroll','touchstart'].forEach(e => document.addEventListener(e, resetIdle));
+        resetIdle();
+      });
+    })();
+  </script>
+
+  <div class="phone">
+    <!-- Global Home Button -->
+    <a class="homeBtn" href="index.html" aria-label="Go to Home">
+      <svg viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
+      Home
+    </a>
+
+    <!-- Header with game logo -->
+    <div class="header">
+      <div class="logoWrap">
+        <img src="mi-fantasy5.png" alt="Fantasy 5 logo" id="gameLogo">
+      </div>
+      <div class="timeLeft">TIME LEFT TO PURCHASE: <span>0 days 09h 25m</span></div>
+      <div class="jackpot">ESTIMATED JACKPOT: <span>$115,000</span></div>
+    </div>
+
+    <!-- Form section -->
+    <div class="formSection">
+      <div class="formRow">
+        <div class="formGroup">
+          <label class="formLabel">Number of draws</label>
+          <div class="selectWrap">
+            <select class="selectBox">
+              <option>Next 5 drawings</option>
+              <option>Next 10 drawings</option>
+              <option>Next 20 drawings</option>
+            </select>
+          </div>
+        </div>
+        <div class="formGroup">
+          <label class="formLabel">Number of Tickets</label>
+          <div class="selectWrap">
+            <select class="selectBox">
+              <option>1 Ticket</option>
+              <option>2 Tickets</option>
+              <option>5 Tickets</option>
+              <option>10 Tickets</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <div class="actionRow">
+        <button class="actionBtn" type="button">
+          <svg viewBox="0 0 24 24"><path d="M17.65 6.35A7.958 7.958 0 0012 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08A5.99 5.99 0 0112 18c-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/></svg>
+          AUTO FILL
+        </button>
+        <button class="actionBtn" type="button">
+          <svg viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z"/></svg>
+          CLEAR ALL
+        </button>
+      </div>
+    </div>
+
+    <!-- Ticket section -->
+    <div class="ticketSection">
+      <div class="ticketCard">
+        <div class="ticketHeader">
+          <div class="ticketToggle active"></div>
+          <span class="ticketLabel">Ticket 1 of 1</span>
+        </div>
+        <div class="numberBalls">
+          <div class="ball">7</div>
+          <div class="ball">14</div>
+          <div class="ball">22</div>
+          <div class="ball">31</div>
+          <div class="ball">38</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <div class="footer">
+      <div class="priceRow">
+        <div class="priceInfo">
+          <span class="price">Price: $5.00</span>
+          <span class="gameRules">Game Rules</span>
+        </div>
+      </div>
+      <button class="addToCartBtn" type="button">ADD TO CART</button>
+    </div>
+  </div>
+
+  <script>
+    // State Lottery logo swapping
+    (function() {
+      const SETTINGS_KEY = 'tw_settings';
+
+      function getSettings() {
+        const stored = localStorage.getItem(SETTINGS_KEY);
+        if (stored) {
+          try {
+            return JSON.parse(stored);
+          } catch (e) {
+            return { stateLottery: 'WY' };
+          }
+        }
+        return { stateLottery: 'WY' };
+      }
+
+      function applyLogoSwap() {
+        const settings = getSettings();
+        const state = settings.stateLottery || 'WY';
+        const logo = document.getElementById('gameLogo');
+
+        if (logo) {
+          if (state === 'MI') {
+            logo.setAttribute('src', 'mi-fantasy5.png');
+            logo.setAttribute('alt', 'Fantasy 5 logo');
+          } else if (state === 'MA') {
+            logo.setAttribute('src', 'ma-pick5.png');
+            logo.setAttribute('alt', 'Mass Cash logo');
+          } else {
+            // Default to MI for this page since it's MI/MA specific
+            logo.setAttribute('src', 'mi-fantasy5.png');
+            logo.setAttribute('alt', 'Fantasy 5 logo');
+          }
+        }
+      }
+
+      document.addEventListener('DOMContentLoaded', applyLogoSwap);
+    })();
+  </script>
+</body>
+</html>
