@@ -259,6 +259,33 @@
       animation: fadeUp .4s ease-out .7s both;
     }
 
+    /* Global Home Button */
+    .homeBtn{
+      position:absolute;
+      right:16px;
+      top:54px;
+      display:flex;
+      align-items:center;
+      gap:4px;
+      padding:6px 10px;
+      border-radius:10px;
+      text-decoration:none;
+      background:#E8272C;
+      color:#fff;
+      font-weight:700;
+      font-size:11px;
+      box-shadow:0 4px 12px rgba(232,39,44,.35);
+      transition:background .15s ease, transform .1s ease;
+      z-index:10;
+    }
+    .homeBtn:hover{ background:#C41E22; }
+    .homeBtn:active{ transform:scale(.97); }
+    .homeBtn svg{
+      width:14px;
+      height:14px;
+      fill:currentColor;
+    }
+
     /* Clickable Hotspot Effects - only for links to .html pages */
     a[href$=".html"] {
       position: relative;
@@ -340,6 +367,12 @@
     })();
   </script>
   <div class="phone">
+    <!-- Global Home Button -->
+    <a class="homeBtn" href="index.html" aria-label="Go to Home">
+      <svg viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
+      Home
+    </a>
+
     <main>
       <div class="successRing">
         <svg viewBox="0 0 24 24">

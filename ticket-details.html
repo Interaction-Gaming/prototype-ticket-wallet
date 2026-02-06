@@ -78,6 +78,33 @@
     }
     .back:hover{ background:rgba(255,255,255,.08); }
 
+    /* Global Home Button */
+    .homeBtn{
+      position:absolute;
+      right:0;
+      top:50%;
+      transform:translateY(-50%);
+      display:flex;
+      align-items:center;
+      gap:4px;
+      padding:6px 10px;
+      border-radius:10px;
+      text-decoration:none;
+      background:#E8272C;
+      color:#fff;
+      font-weight:700;
+      font-size:11px;
+      box-shadow:0 4px 12px rgba(232,39,44,.35);
+      transition:background .15s ease, transform .1s ease;
+    }
+    .homeBtn:hover{ background:#C41E22; }
+    .homeBtn:active{ transform:translateY(-50%) scale(.97); }
+    .homeBtn svg{
+      width:14px;
+      height:14px;
+      fill:currentColor;
+    }
+
     .title{
       font-weight:900;
       letter-spacing:.2px;
@@ -470,6 +497,10 @@
       <div class="titleRow">
         <a class="back" href="wallet.html" aria-label="Back to Ticket Wallet">←</a>
         <div class="title">Ticket Details</div>
+        <a class="homeBtn" href="index.html" aria-label="Go to Home">
+          <svg viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
+          Home
+        </a>
       </div>
     </header>
 

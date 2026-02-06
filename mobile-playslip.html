@@ -84,6 +84,29 @@
       width:42px;
     }
 
+    /* Global Home Button */
+    .homeBtn{
+      display:flex;
+      align-items:center;
+      gap:4px;
+      padding:6px 10px;
+      border-radius:10px;
+      text-decoration:none;
+      background:#E8272C;
+      color:#fff;
+      font-weight:700;
+      font-size:11px;
+      box-shadow:0 4px 12px rgba(232,39,44,.35);
+      transition:background .15s ease, transform .1s ease;
+    }
+    .homeBtn:hover{ background:#C41E22; }
+    .homeBtn:active{ transform:scale(.97); }
+    .homeBtn svg{
+      width:14px;
+      height:14px;
+      fill:currentColor;
+    }
+
     /* Main content */
     main{
       flex:1;
@@ -385,7 +408,10 @@
           <line x1="18" y1="6" x2="6" y2="18" />
         </svg>
       </a>
-      <div class="header-spacer"></div>
+      <a class="homeBtn" href="index.html" aria-label="Go to Home">
+        <svg viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
+        Home
+      </a>
     </header>
 
     <main>
