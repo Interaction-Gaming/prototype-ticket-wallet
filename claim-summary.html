@@ -61,19 +61,30 @@
 
     .back{
       position:absolute;
-      left:0;
+      left:-90px;
       top:50%;
       transform:translateY(-50%);
       display:flex;
       align-items:center;
-      padding:8px 10px;
-      border-radius:12px;
+      gap:4px;
+      padding:6px 8px;
+      border-radius:8px;
       text-decoration:none;
-      color:rgba(255,255,255,.92);
-      font-weight:900;
-      font-size:14px;
+      color:#fff;
+      font-weight:500;
+      font-size:17px;
     }
     .back:hover{ background:rgba(255,255,255,.08); }
+
+    .back svg{
+      width:12px;
+      height:20px;
+      fill:none;
+      stroke:#fff;
+      stroke-width:3;
+      stroke-linecap:round;
+      stroke-linejoin:round;
+    }
 
     /* Global Home Button */
     .homeBtn{
@@ -109,6 +120,7 @@
       font-weight:900;
       letter-spacing:.2px;
       font-size:18px;
+      margin-left:-37px;
     }
 
     main{
@@ -337,7 +349,10 @@
   <div class="phone">
     <header>
       <div class="titleRow">
-        <a class="back" href="wallet.html" aria-label="Back to Ticket Wallet">←</a>
+        <a class="back" href="wallet.html" aria-label="Back to Ticket Wallet">
+          <svg viewBox="0 0 12 20"><polyline points="10,2 2,10 10,18"/></svg>
+          Back
+        </a>
         <div class="title">Claim Winnings</div>
       </div>
     </header>
