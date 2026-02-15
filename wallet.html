@@ -1029,7 +1029,13 @@
     if (cowboyCashOut) {
       cowboyCashOut.classList.add('has-destination');
       cowboyCashOut.addEventListener('click', () => {
-        window.location.href = 'claim-summary.html';
+        // Check if in MA mode - show modal instead of navigating
+        const settings = JSON.parse(localStorage.getItem('tw_settings') || '{}');
+        if (settings.stateLottery === 'MA') {
+          openMaCashOutModal();
+        } else {
+          window.location.href = 'claim-summary.html';
+        }
       });
     }
   }
@@ -1068,6 +1074,18 @@
     <p>Tickets purchased online are automatically paid to your wallet.</p>
     <div class="modal-buttons">
       <button class="modal-btn primary" onclick="closeOnlineTicketModal()">Dismiss</button>
+    </div>
+  </div>
+</div>
+
+<!-- MA Cash Out Modal -->
+<div class="modal-overlay" id="maCashOutModal">
+  <div class="modal-box" style="position:relative">
+    <button class="modal-close" onclick="closeMaCashOutModal()" aria-label="Close">&times;</button>
+    <h3>Mobile Claim Unavailable</h3>
+    <p>Only tickets with winnings of $601 to $5,000 may be claimed on mobile. Please visit a retailer.</p>
+    <div class="modal-buttons">
+      <button class="modal-btn primary" onclick="closeMaCashOutModal()">Dismiss</button>
     </div>
   </div>
 </div>
@@ -1120,6 +1138,18 @@
   // Close modal when clicking outside
   document.getElementById('onlineTicketModal').addEventListener('click', function(e) {
     if (e.target === this) closeOnlineTicketModal();
+  });
+
+  // MA Cash Out modal functions
+  function openMaCashOutModal() {
+    document.getElementById('maCashOutModal').classList.add('visible');
+  }
+  function closeMaCashOutModal() {
+    document.getElementById('maCashOutModal').classList.remove('visible');
+  }
+  // Close modal when clicking outside
+  document.getElementById('maCashOutModal').addEventListener('click', function(e) {
+    if (e.target === this) closeMaCashOutModal();
   });
 
   // Wire "View Ticket", "Cash Out", and "Buy Again" on the Online ticket card
