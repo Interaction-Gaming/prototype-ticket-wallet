@@ -242,6 +242,51 @@
       border:2px solid #d1d1d6;
     }
 
+    .addPaymentOption{
+      display:flex;
+      align-items:center;
+      padding:14px 16px;
+      border-top:1px solid rgba(0,0,0,.08);
+      cursor:pointer;
+      transition: background .15s ease;
+    }
+    .addPaymentOption:hover{ background:rgba(0,0,0,.03); }
+
+    .addIcon{
+      width:44px;
+      height:28px;
+      border-radius:6px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      margin-right:14px;
+      background:rgba(0,0,0,.06);
+      border:1px dashed rgba(0,0,0,.20);
+    }
+
+    .addIcon svg{
+      width:18px;
+      height:18px;
+      fill:#8e8e93;
+    }
+
+    .addPaymentText{
+      font-size:16px;
+      font-weight:500;
+      color:#000;
+    }
+
+    .chevronRight{
+      margin-left:auto;
+      width:20px;
+      height:20px;
+      fill:none;
+      stroke:#c7c7cc;
+      stroke-width:2;
+      stroke-linecap:round;
+      stroke-linejoin:round;
+    }
+
     /* Apple Pay Sheet */
     .applePaySheet{
       background:#fff;
@@ -462,6 +507,14 @@
           <div class="checkmark">
             <svg viewBox="0 0 24 24"><polyline points="4,12 10,18 20,6"/></svg>
           </div>
+        </div>
+
+        <div class="addPaymentOption">
+          <div class="addIcon">
+            <svg viewBox="0 0 24 24"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg>
+          </div>
+          <span class="addPaymentText">Add a new payment destination</span>
+          <svg class="chevronRight" viewBox="0 0 24 24"><polyline points="9,6 15,12 9,18"/></svg>
         </div>
       </div>
 
