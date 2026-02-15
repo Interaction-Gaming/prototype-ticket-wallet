@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Transfer Complete</title>
+  <title>Claim Complete</title>
 
   <style>
     :root{
@@ -27,7 +27,7 @@
       border-radius:28px;
       overflow:visible;
       position:relative;
-      background:linear-gradient(180deg, #1c1c1e 0%, #000 100%);
+      background:#f2f2f7;
       box-shadow:0 20px 60px rgba(0,0,0,.55);
       display:flex;
       flex-direction:column;
@@ -40,21 +40,22 @@
       flex-direction:column;
       align-items:center;
       justify-content:center;
-      padding:40px 24px;
+      padding:20px 24px;
       text-align:center;
     }
 
     /* Success animation ring */
     .successRing{
-      width:120px;
-      height:120px;
+      width:90px;
+      height:90px;
       border-radius:50%;
       background:linear-gradient(135deg, #34c759 0%, #30d158 100%);
       display:flex;
       align-items:center;
       justify-content:center;
-      margin-bottom:32px;
-      box-shadow:0 8px 32px rgba(52,199,89,.4);
+      margin-top:-50px;
+      margin-bottom:16px;
+      box-shadow:0 6px 24px rgba(52,199,89,.4);
       animation: scaleIn .4s ease-out;
     }
 
@@ -65,8 +66,8 @@
     }
 
     .successRing svg{
-      width:60px;
-      height:60px;
+      width:45px;
+      height:45px;
       fill:none;
       stroke:#fff;
       stroke-width:4;
@@ -81,17 +82,17 @@
     }
 
     .successTitle{
-      font-size:28px;
+      font-size:26px;
       font-weight:700;
-      color:#fff;
-      margin-bottom:8px;
+      color:#000;
+      margin-bottom:4px;
       animation: fadeUp .4s ease-out .3s both;
     }
 
     .successSub{
-      font-size:17px;
-      color:rgba(255,255,255,.6);
-      margin-bottom:40px;
+      font-size:16px;
+      color:#8e8e93;
+      margin-bottom:20px;
       animation: fadeUp .4s ease-out .4s both;
     }
 
@@ -100,15 +101,15 @@
       100%{ transform:translateY(0); opacity:1; }
     }
 
-    /* Apple Cash Card */
-    .appleCashCard{
+    /* Visa Debit Card */
+    .visaCard{
       width:100%;
       max-width:320px;
-      background:linear-gradient(145deg, #1c1c1e 0%, #2c2c2e 100%);
+      background:#fff;
       border-radius:20px;
-      padding:24px;
-      border:1px solid rgba(255,255,255,.1);
-      box-shadow:0 12px 40px rgba(0,0,0,.4);
+      padding:18px;
+      border:1px solid rgba(0,0,0,.08);
+      box-shadow:0 4px 24px rgba(0,0,0,.08);
       animation: fadeUp .4s ease-out .5s both;
     }
 
@@ -116,109 +117,139 @@
       display:flex;
       align-items:center;
       gap:12px;
-      margin-bottom:20px;
+      margin-bottom:14px;
     }
 
-    .appleIcon{
+    .visaIcon{
       width:44px;
-      height:44px;
-      border-radius:10px;
-      background:#000;
+      height:28px;
+      border-radius:6px;
+      background:linear-gradient(135deg, #1a1f71 0%, #00579f 100%);
       display:flex;
       align-items:center;
       justify-content:center;
     }
 
-    .appleIcon svg{
-      width:24px;
-      height:24px;
+    .visaIcon svg{
+      height:16px;
       fill:#fff;
     }
 
     .cardTitle{
       font-size:17px;
       font-weight:600;
-      color:#fff;
+      color:#000;
     }
 
     .cardSubtitle{
       font-size:13px;
-      color:rgba(255,255,255,.5);
+      color:#8e8e93;
       margin-top:2px;
     }
 
     .transferAmount{
       text-align:center;
-      padding:20px 0;
-      border-top:1px solid rgba(255,255,255,.08);
-      border-bottom:1px solid rgba(255,255,255,.08);
+      padding:14px 0;
+      border-top:1px solid rgba(0,0,0,.06);
+      border-bottom:1px solid rgba(0,0,0,.06);
     }
 
     .amountLabel{
-      font-size:13px;
+      font-size:12px;
       font-weight:500;
-      color:rgba(255,255,255,.5);
+      color:#8e8e93;
       text-transform:uppercase;
       letter-spacing:.5px;
-      margin-bottom:8px;
+      margin-bottom:4px;
     }
 
     .amountValue{
-      font-size:44px;
+      font-size:38px;
       font-weight:700;
       color:#34c759;
       letter-spacing:-1px;
     }
 
     .transferDetails{
-      padding-top:16px;
+      padding-top:10px;
     }
 
     .detailRow{
       display:flex;
       justify-content:space-between;
       align-items:center;
-      padding:8px 0;
+      padding:5px 0;
     }
 
     .detailLabel{
       font-size:14px;
-      color:rgba(255,255,255,.5);
+      color:#8e8e93;
     }
 
     .detailValue{
       font-size:14px;
       font-weight:600;
-      color:#fff;
+      color:#000;
     }
 
-    .detailValue.success{
-      color:#34c759;
+    .detailValue.processing{
+      color:#f5a623;
+    }
+
+    /* Transfer notice */
+    .transferNotice{
+      width:100%;
+      max-width:320px;
+      background:rgba(245,166,35,.12);
+      border:1px solid rgba(245,166,35,.25);
+      border-radius:12px;
+      padding:12px 14px;
+      margin-top:12px;
+      display:flex;
+      align-items:flex-start;
+      gap:10px;
+      animation: fadeUp .4s ease-out .55s both;
+    }
+
+    .transferNotice svg{
+      width:20px;
+      height:20px;
+      fill:#f5a623;
+      flex-shrink:0;
+      margin-top:1px;
+    }
+
+    .transferNotice p{
+      margin:0;
+      font-size:14px;
+      color:#000;
+      line-height:1.4;
+      text-align:left;
     }
 
     /* Actions */
     .actions{
       width:100%;
       max-width:320px;
-      margin-top:32px;
+      margin-top:20px;
       animation: fadeUp .4s ease-out .6s both;
     }
 
     .primaryBtn{
       display:block;
       width:100%;
-      padding:16px 24px;
+      padding:14px 24px;
       border:none;
       border-radius:14px;
-      background:#fff;
-      color:#000;
+      background:#007aff;
+      color:#fff;
       font-size:17px;
       font-weight:600;
       cursor:pointer;
       text-decoration:none;
       text-align:center;
       transition: transform .1s ease, opacity .1s ease;
-      margin-bottom:12px;
+      margin-bottom:10px;
     }
 
     .primaryBtn:hover{
@@ -232,11 +263,11 @@
     .secondaryBtn{
       display:block;
       width:100%;
-      padding:16px 24px;
+      padding:14px 24px;
       border:none;
       border-radius:14px;
-      background:rgba(255,255,255,.1);
-      color:#fff;
+      background:rgba(0,0,0,.06);
+      color:#000;
       font-size:17px;
       font-weight:600;
       cursor:pointer;
@@ -246,7 +277,7 @@
     }
 
     .secondaryBtn:hover{
-      background:rgba(255,255,255,.15);
+      background:rgba(0,0,0,.10);
     }
 
     .secondaryBtn:active{
@@ -254,9 +285,9 @@
     }
 
     .timestamp{
-      margin-top:24px;
+      margin-top:16px;
       font-size:13px;
-      color:rgba(255,255,255,.35);
+      color:#8e8e93;
       animation: fadeUp .4s ease-out .7s both;
     }
 
@@ -384,24 +415,25 @@
         </svg>
       </div>
 
-      <div class="successTitle">Transfer Complete</div>
-      <div class="successSub">Your winnings are now in Apple Cash</div>
+      <div class="successTitle">Claim Complete</div>
+      <div class="successSub">Your transfer is being processed</div>
 
-      <div class="appleCashCard">
+      <div class="visaCard">
         <div class="cardHeader">
-          <div class="appleIcon">
-            <svg viewBox="0 0 24 24">
-              <path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.81-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/>
+          <div class="visaIcon">
+            <svg viewBox="0 0 48 48">
+              <path d="M19.6 33.2h-4.5l2.8-17.4h4.5l-2.8 17.4zm18.1-17c-.9-.4-2.3-.8-4-.8-4.4 0-7.5 2.4-7.5 5.8 0 2.5 2.2 3.9 3.9 4.8 1.8.9 2.4 1.5 2.4 2.3 0 1.2-1.4 1.8-2.8 1.8-1.9 0-2.9-.3-4.4-.9l-.6-.3-.7 4.1c1.1.5 3.1 1 5.2 1 4.7 0 7.7-2.3 7.8-6 0-2-.1-3.6-3.2-5.1-1.3-.7-2.1-1.1-2.1-1.8 0-.6.7-1.2 2.2-1.2 1.2 0 2.1.3 2.8.6l.3.2.8-3.5zM44 15.8h-3.5c-1.1 0-1.9.3-2.4 1.4l-6.7 16h4.7l.9-2.7h5.7l.5 2.7H48l-4-17.4zm-5.5 11.2c.4-1 1.8-4.9 1.8-4.9s.4-1 .6-1.7l.3 1.5s.9 4.2 1.1 5.1h-3.8zM15.4 15.8l-4.4 11.9-.5-2.4c-.8-2.8-3.4-5.8-6.3-7.3l4 15.1h4.7l7-17.4h-4.5v.1z"/>
+              <path d="M7.3 15.8H.1l-.1.5c5.6 1.4 9.3 4.9 10.8 9.1l-1.6-8c-.3-1.1-1.1-1.5-1.9-1.6z" fill="#f9a51a"/>
             </svg>
           </div>
           <div>
-            <div class="cardTitle">Apple Cash</div>
-            <div class="cardSubtitle">Added to Wallet</div>
+            <div class="cardTitle">Visa Debit</div>
+            <div class="cardSubtitle">Card ending in 4821</div>
           </div>
         </div>
 
         <div class="transferAmount">
-          <div class="amountLabel">Amount Added</div>
+          <div class="amountLabel">Amount Transferring</div>
           <div class="amountValue">+$12.00</div>
         </div>
 
@@ -412,13 +444,18 @@
           </div>
           <div class="detailRow">
             <span class="detailLabel">Status</span>
-            <span class="detailValue success">Complete</span>
+            <span class="detailValue processing">Processing</span>
           </div>
           <div class="detailRow">
             <span class="detailLabel">Reference</span>
             <span class="detailValue">#WYL-48291</span>
           </div>
         </div>
+      </div>
+
+      <div class="transferNotice">
+        <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/></svg>
+        <p>Your funds will be available in your bank account in approximately 30 minutes or less.</p>
       </div>
 
       <div class="actions">
